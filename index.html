@@ -542,39 +542,30 @@ function saveApps() { localStorage.setItem('mps_appareils', JSON.stringify(appar
  
 let appareils = loadApps();
 // ============================================================
-// STOCKAGE PARTAGÉ — JSONBin.io
-// Remplacez BIN_ID et API_KEY par vos valeurs JSONBin
-// Instructions : https://jsonbin.io → créer un compte gratuit
-// → New Bin → coller {} → copier le BIN ID
-// → Account → API Keys → créer une clé → copier
+// STOCKAGE PARTAGÉ — Google Firebase Realtime Database
+// Base de données temps réel, gratuit, sans restriction CORS
 // ============================================================
-const JSONBIN_BIN_ID = '69f8c061856a682189a5e8b6';
-const JSONBIN_API_KEY = '$2a$10$wjIGMsJyWQtodYgBXm8W6OYYepwO.Agkbr43GtODtOohxah/zMZzO';
-const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+const FB_URL = 'https://app-reservation-fad8b-default-rtdb.europe-west1.firebasedatabase.app';
  
 let reservations = [];
 let blocked = [];
 let isDataLoaded = false;
  
 async function loadData() {
-  if(JSONBIN_BIN_ID === 'VOTRE_BIN_ID_ICI') {
-    // Mode local si pas encore configuré
-    reservations = JSON.parse(localStorage.getItem('mps_res') || '[]');
-    blocked = JSON.parse(localStorage.getItem('mps_blocked') || '[]');
-    isDataLoaded = true;
-    return;
-  }
   try {
     showLoader(true);
-    const r = await fetch(JSONBIN_URL + '/latest', {
-      headers: { 'X-Master-Key': JSONBIN_API_KEY }
-    });
-    const data = await r.json();
-    reservations = data.record.reservations || [];
-    blocked = data.record.blocked || [];
+    const r = await fetch(FB_URL + '/data.json');
+    if(r.ok) {
+      const data = await r.json();
+      if(data) {
+        reservations = data.reservations || [];
+        blocked = data.blocked || [];
+      }
+    }
     isDataLoaded = true;
   } catch(e) {
-    console.error('Erreur chargement données:', e);
+    console.error('Erreur chargement:', e);
+    // Fallback local
     reservations = JSON.parse(localStorage.getItem('mps_res') || '[]');
     blocked = JSON.parse(localStorage.getItem('mps_blocked') || '[]');
     isDataLoaded = true;
@@ -584,23 +575,17 @@ async function loadData() {
 }
  
 async function saveData() {
-  // Toujours sauvegarder en local comme backup
   localStorage.setItem('mps_res', JSON.stringify(reservations));
   localStorage.setItem('mps_blocked', JSON.stringify(blocked));
-  
-  if(JSONBIN_BIN_ID === 'VOTRE_BIN_ID_ICI') return;
   try {
-    await fetch(JSONBIN_URL, {
+    await fetch(FB_URL + '/data.json', {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_API_KEY
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ reservations, blocked })
     });
   } catch(e) {
     console.error('Erreur sauvegarde:', e);
-    showToast('⚠️ Erreur de synchronisation, données sauvegardées localement.', 'err');
+    showToast('⚠️ Sauvegardé localement uniquement.', 'err');
   }
 }
  
