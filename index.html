@@ -187,6 +187,20 @@ select.finp{cursor:pointer}
 .ri-acts{display:flex;gap:7px;flex-wrap:wrap}
 .empty-st{text-align:center;padding:26px;color:var(--muted);font-size:.83rem}
 
+/* OPTIONS EDITOR */
+.opts-editor{background:var(--cream);border-radius:10px;padding:12px;margin-top:10px}
+.opts-editor-title{font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.opt-edit-item{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:8px;position:relative}
+.opt-edit-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:7px;align-items:end}
+.opt-edit-label{font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:3px;display:block}
+.opt-del-btn{background:#FEE2E2;border:none;border-radius:8px;padding:8px 10px;cursor:pointer;color:var(--danger);font-size:.85rem;height:38px;align-self:end}
+.opt-del-btn:hover{background:#FECACA}
+.add-opt-btn{background:var(--blue-pale);border:2px dashed var(--blue);border-radius:8px;padding:8px 14px;cursor:pointer;color:var(--navy);font-size:.8rem;font-weight:600;width:100%;margin-top:6px;transition:all .2s}
+.add-opt-btn:hover{background:var(--blue-light)}
+.var-edit-item{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px}
+.var-edit-prices{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.sect-sep{height:1px;background:var(--border);margin:14px 0}
+
 /* OPTIONS & VARIANTS */
 .opt-step{background:var(--white);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:13px}
 .variant-grid{display:grid;gap:10px;margin-bottom:14px}
@@ -1247,8 +1261,97 @@ function renderGAList() {
           <div class="fgrp"><label class="flbl">🔐 Caution (€)</label><input type="number" id="gs${app.id}_caution" class="finp" value="${app.caution||0}" placeholder="0"></div>
           <div class="fgrp"><label class="flbl">📝 Note (affiché au client)</label><input type="text" id="gs${app.id}_note" class="finp" value="${app.note||''}" placeholder="Ex: 500ml inclus..."></div>
         </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-p btn-sm" onclick="saveAppareil(${app.id})">💾 Sauvegarder</button>
+        <div class="sect-sep"></div>
+
+        <!-- OPTIONS EDITOR -->
+        <div class="opts-editor" id="optsEditor${app.id}">
+          <div class="opts-editor-title">
+            <span>⚙️ Options client</span>
+            <button class="add-opt-btn" style="width:auto;padding:5px 12px" onclick="addOption(${app.id})">+ Ajouter une option</button>
+          </div>
+          <div id="optsList${app.id}">
+            ${(app.options||[]).map((opt,oi)=>`
+              <div class="opt-edit-item">
+                <div class="opt-edit-row">
+                  <div>
+                    <span class="opt-edit-label">Label (affiché au client)</span>
+                    <input type="text" class="finp" style="font-size:.82rem;padding:8px 10px" value="${opt.label||''}"
+                      onchange="updateOption(${app.id},${oi},'label',this.value)">
+                  </div>
+                  <div>
+                    <span class="opt-edit-label">Prix (€)</span>
+                    <input type="number" class="finp" style="font-size:.82rem;padding:8px 10px" value="${opt.price||0}"
+                      onchange="updateOption(${app.id},${oi},'price',+this.value)">
+                  </div>
+                  <div>
+                    <span class="opt-edit-label">Type</span>
+                    <select class="finp" style="font-size:.82rem;padding:8px 10px"
+                      onchange="updateOption(${app.id},${oi},'type',this.value)">
+                      <option value="checkbox" ${opt.type==='checkbox'?'selected':''}>✅ Oui/Non</option>
+                      <option value="counter" ${opt.type==='counter'?'selected':''}>🔢 Quantité</option>
+                    </select>
+                  </div>
+                  <button class="opt-del-btn" onclick="removeOption(${app.id},${oi})" title="Supprimer">🗑️</button>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- VARIANTES EDITOR (Beer-Up style) -->
+        <div class="opts-editor" id="varEditor${app.id}" style="margin-top:8px">
+          <div class="opts-editor-title">
+            <span>🎯 Variantes / Formules</span>
+            <button class="add-opt-btn" style="width:auto;padding:5px 12px" onclick="addVariant(${app.id})">+ Ajouter une variante</button>
+          </div>
+          <div id="varsList${app.id}">
+            ${(app.variants||[]).map((v,vi)=>`
+              <div class="var-edit-item">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                  <input type="text" class="finp" style="font-size:.85rem;font-weight:600;padding:7px 10px;flex:1;margin-right:8px"
+                    value="${v.label||''}" placeholder="Nom de la variante"
+                    onchange="updateVariant(${app.id},${vi},'label',this.value)">
+                  <button class="opt-del-btn" onclick="removeVariant(${app.id},${vi})" title="Supprimer">🗑️</button>
+                </div>
+                <div style="margin-bottom:6px">
+                  <span class="opt-edit-label">Sous-titre</span>
+                  <input type="text" class="finp" style="font-size:.8rem;padding:7px 10px" value="${v.subtitle||''}"
+                    placeholder="Ex: 6 à 12 personnes"
+                    onchange="updateVariant(${app.id},${vi},'subtitle',this.value)">
+                </div>
+                <div style="margin-bottom:6px">
+                  <span class="opt-edit-label">Ce qui est inclus</span>
+                  <input type="text" class="finp" style="font-size:.8rem;padding:7px 10px" value="${v.inclus||''}"
+                    placeholder="Ex: 12 verres, 4 accumulateurs..."
+                    onchange="updateVariant(${app.id},${vi},'inclus',this.value)">
+                </div>
+                <div class="var-edit-prices">
+                  <div>
+                    <span class="opt-edit-label">Journée (€)</span>
+                    <input type="number" class="finp" style="font-size:.82rem;padding:7px 8px" value="${v.prices?.jour||0}"
+                      onchange="updateVariantPrice(${app.id},${vi},'jour',+this.value)">
+                  </div>
+                  <div>
+                    <span class="opt-edit-label">Week-end (€)</span>
+                    <input type="number" class="finp" style="font-size:.82rem;padding:7px 8px" value="${v.prices?.we||0}"
+                      onchange="updateVariantPrice(${app.id},${vi},'we',+this.value)">
+                  </div>
+                  <div>
+                    <span class="opt-edit-label">Semaine (€)</span>
+                    <input type="number" class="finp" style="font-size:.82rem;padding:7px 8px" value="${v.prices?.sem||0}"
+                      onchange="updateVariantPrice(${app.id},${vi},'sem',+this.value)">
+                  </div>
+                  <div>
+                    <span class="opt-edit-label">Caution (€)</span>
+                    <input type="number" class="finp" style="font-size:.82rem;padding:7px 8px" value="${v.caution||0}"
+                      onchange="updateVariant(${app.id},${vi},'caution',+this.value)">
+                  </div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn btn-p btn-sm" onclick="saveAppareil(${app.id})">💾 Sauvegarder tout</button>
           <button class="btn btn-del btn-sm" onclick="deleteAppareil(${app.id})">🗑️ Supprimer</button>
         </div>
       </div>
@@ -1271,6 +1374,61 @@ function previewImg(id, url) {
   prev.onerror=()=>prev.style.display='none';
 }
 
+// ===================== OPTIONS & VARIANTS EDITOR =====================
+function updateOption(appId, idx, key, val) {
+  const app = appareils.find(a=>a.id===appId);
+  if(!app||!app.options) return;
+  app.options[idx][key] = val;
+}
+
+function addOption(appId) {
+  const app = appareils.find(a=>a.id===appId);
+  if(!app) return;
+  if(!app.options) app.options = [];
+  app.options.push({id:'opt_'+Date.now(), label:'Nouvelle option', price:0, type:'checkbox'});
+  renderGAList();
+  // Re-open the panel
+  setTimeout(()=>{ const b=document.getElementById('gab'+appId); if(b){b.classList.add('open'); document.getElementById('garr'+appId).textContent='▴';} }, 50);
+}
+
+function removeOption(appId, idx) {
+  const app = appareils.find(a=>a.id===appId);
+  if(!app||!app.options) return;
+  app.options.splice(idx, 1);
+  renderGAList();
+  setTimeout(()=>{ const b=document.getElementById('gab'+appId); if(b){b.classList.add('open'); document.getElementById('garr'+appId).textContent='▴';} }, 50);
+}
+
+function addVariant(appId) {
+  const app = appareils.find(a=>a.id===appId);
+  if(!app) return;
+  if(!app.variants) app.variants = [];
+  app.variants.push({id:'var_'+Date.now(), label:'Nouvelle formule', subtitle:'', inclus:'', prices:{jour:0,we:0,sem:0}, caution:0});
+  renderGAList();
+  setTimeout(()=>{ const b=document.getElementById('gab'+appId); if(b){b.classList.add('open'); document.getElementById('garr'+appId).textContent='▴';} }, 50);
+}
+
+function removeVariant(appId, idx) {
+  const app = appareils.find(a=>a.id===appId);
+  if(!app||!app.variants) return;
+  app.variants.splice(idx, 1);
+  renderGAList();
+  setTimeout(()=>{ const b=document.getElementById('gab'+appId); if(b){b.classList.add('open'); document.getElementById('garr'+appId).textContent='▴';} }, 50);
+}
+
+function updateVariant(appId, idx, key, val) {
+  const app = appareils.find(a=>a.id===appId);
+  if(!app||!app.variants) return;
+  app.variants[idx][key] = val;
+}
+
+function updateVariantPrice(appId, idx, priceKey, val) {
+  const app = appareils.find(a=>a.id===appId);
+  if(!app||!app.variants) return;
+  if(!app.variants[idx].prices) app.variants[idx].prices = {};
+  app.variants[idx].prices[priceKey] = val;
+}
+
 function saveAppareil(id) {
   const app=appareils.find(a=>a.id===id);
   if(!app) return;
@@ -1280,8 +1438,10 @@ function saveAppareil(id) {
   app.prices={jour:+g('jour'),deux:+g('deux'),we:+g('we'),sem:+g('sem'),mois:+g('mois')};
   app.caution=+g('caution')||0;
   app.note=g('note')||'';
+  // options & variants are already updated live via updateOption/updateVariant
   saveApps().then(() => {
     renderGAList(); renderApps();
+    showToast('✅ Appareil sauvegardé et synchronisé !','ok');
   });
 }
 
