@@ -480,6 +480,10 @@ select.finp{cursor:pointer}
             <div class="fgrp"><label class="flbl">Semaine (€)</label><input type="number" id="naSem" class="finp" placeholder="34"></div>
             <div class="fgrp"><label class="flbl">Mois (€)</label><input type="number" id="naMois" class="finp" placeholder="59"></div>
           </div>
+          <div class="frow" style="margin-bottom:12px">
+            <div class="fgrp"><label class="flbl">🔐 Caution (€)</label><input type="number" id="naCaution" class="finp" placeholder="99"></div>
+            <div class="fgrp"><label class="flbl">📝 Note client</label><input type="text" id="naNote" class="finp" placeholder="Ex: 500ml inclus..."></div>
+          </div>
           <button class="btn btn-p" onclick="addAppareil()">➕ Ajouter cet appareil</button>
         </div>
       </div>
@@ -624,7 +628,14 @@ async function loadData() {
         reservations = data.reservations || [];
         blocked = data.blocked || [];
         if(data.appareils && data.appareils.length > 0) {
-          appareils = data.appareils;
+          // Check if Firebase data has variants (new format)
+          // If not, use DEFAULT_APPAREILS (force update)
+          const hasVariants = data.appareils.some(a => a.variants || a.options || a.note);
+          appareils = hasVariants ? data.appareils : JSON.parse(JSON.stringify(DEFAULT_APPAREILS));
+          if(!hasVariants) {
+            // Push new defaults to Firebase
+            setTimeout(() => saveApps(), 500);
+          }
         }
       }
     }
@@ -1232,6 +1243,10 @@ function renderGAList() {
           <div class="fgrp"><label class="flbl">Semaine (€)</label><input type="number" id="gs${app.id}_sem" class="finp" value="${app.prices.sem}"></div>
           <div class="fgrp"><label class="flbl">Mois (€)</label><input type="number" id="gs${app.id}_mois" class="finp" value="${app.prices.mois}"></div>
         </div>
+        <div class="frow" style="margin-bottom:12px">
+          <div class="fgrp"><label class="flbl">🔐 Caution (€)</label><input type="number" id="gs${app.id}_caution" class="finp" value="${app.caution||0}" placeholder="0"></div>
+          <div class="fgrp"><label class="flbl">📝 Note (affiché au client)</label><input type="text" id="gs${app.id}_note" class="finp" value="${app.note||''}" placeholder="Ex: 500ml inclus..."></div>
+        </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-p btn-sm" onclick="saveAppareil(${app.id})">💾 Sauvegarder</button>
           <button class="btn btn-del btn-sm" onclick="deleteAppareil(${app.id})">🗑️ Supprimer</button>
@@ -1263,6 +1278,8 @@ function saveAppareil(id) {
   app.short=g('short'); app.name=g('name'); app.img=g('img');
   app.cat=g('cat'); app.icon=g('icon');
   app.prices={jour:+g('jour'),deux:+g('deux'),we:+g('we'),sem:+g('sem'),mois:+g('mois')};
+  app.caution=+g('caution')||0;
+  app.note=g('note')||'';
   saveApps().then(() => {
     renderGAList(); renderApps();
   });
@@ -1299,10 +1316,12 @@ function addAppareil() {
     id:newId, cat:document.getElementById('naCat').value,
     name:nom, short, icon:document.getElementById('naIcon').value||'📦',
     img:document.getElementById('naImg').value.trim(),
-    prices:{jour,deux,we,sem,mois}, caution:0
+    prices:{jour,deux,we,sem,mois},
+    caution:+document.getElementById('naCaution').value||0,
+    note:document.getElementById('naNote').value.trim()||''
   });
   saveApps().then(() => { renderGAList(); renderApps(); populateBAppSelect(); });
-  ['naNom','naShort','naIcon','naImg','naJ','na2j','naWe','naSem','naMois'].forEach(id=>{document.getElementById(id).value='';});
+  ['naNom','naShort','naIcon','naImg','naJ','na2j','naWe','naSem','naMois','naCaution','naNote'].forEach(id=>{document.getElementById(id).value='';});
   showToast('✅ Appareil ajouté !','ok');
 }
 
