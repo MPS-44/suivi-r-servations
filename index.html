@@ -19,7 +19,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;font-size:16px}
- 
+
 /* NAV */
 .nav{background:var(--navy);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.18)}
 .nav-logo{display:flex;align-items:center;gap:8px}
@@ -29,10 +29,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .nav-tabs{display:flex;gap:3px}
 .nav-tab{background:transparent;border:none;color:rgba(255,255,255,.6);padding:6px 12px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;transition:all .2s}
 .nav-tab.active,.nav-tab:hover{background:rgba(255,255,255,.15);color:#fff}
- 
+
 /* VIEWS */
 .view{display:none}.view.active{display:block}
- 
+
 /* HERO */
 .hero{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:32px 16px 24px;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;border-radius:50%;background:rgba(212,134,143,.1)}
@@ -43,9 +43,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .hero p{color:rgba(255,255,255,.75);font-size:1rem;position:relative;z-index:1}
 .hero-badges{display:flex;gap:7px;justify-content:center;margin-top:10px;flex-wrap:wrap;position:relative;z-index:1}
 .hbadge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);padding:5px 13px;border-radius:20px;font-size:.84rem;font-weight:500}
- 
+
 .ctr{max-width:960px;margin:0 auto;padding:24px 20px 48px}
- 
+
 /* STEPS */
 .steps{display:flex;align-items:center;justify-content:center;margin-bottom:22px;flex-wrap:wrap;gap:3px}
 .step{display:flex;align-items:center;gap:6px;font-size:.88rem;font-weight:500;color:var(--muted)}
@@ -53,21 +53,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .step-n{width:28px;height:28px;border-radius:50%;background:var(--border);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;transition:all .3s;flex-shrink:0}
 .step.active .step-n{background:var(--navy);color:#fff}.step.done .step-n{background:var(--success);color:#fff}
 .step-line{width:22px;height:2px;background:var(--border);margin:0 2px}
- 
+
 /* CARD */
 .card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:16px}
 .card-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px}
- 
+
 /* BANNER */
 .banner{background:linear-gradient(135deg,var(--pink-pale),#FFF5E8);border:2px solid var(--pink-light);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:.95rem}
 .banner .bi{font-size:1.3rem;flex-shrink:0}
 .banner strong{color:var(--navy)}.banner em{color:var(--pink);font-weight:700;font-style:normal}
- 
+
 /* CAT TABS */
 .cat-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px}
 .ctab{padding:4px 11px;border-radius:20px;border:2px solid var(--border);background:var(--white);font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted)}
 .ctab.active{border-color:var(--navy);background:var(--navy);color:#fff}
- 
+
 /* APPAREILS GRID */
 .agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .acard{border:2px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;background:var(--white);position:relative}
@@ -83,14 +83,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .astatus.ok{background:#D1FAE5;color:#065F46}.astatus.busy{background:#FEF3C7;color:#92400E}
 .acheck{position:absolute;top:5px;left:5px;width:18px;height:18px;background:var(--navy);border-radius:50%;display:none;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:700}
 .acard.selected .acheck{display:flex}
- 
+
 /* SELECTION BAR */
 .sel-bar{background:var(--navy);border-radius:12px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px;margin-bottom:13px;color:#fff}
 .sel-info{font-size:.82rem;margin-bottom:4px}.sel-cnt{font-size:1rem;font-weight:700;color:var(--pink-light)}
 .sel-chips{display:flex;flex-wrap:wrap;gap:5px}
 .schip{background:rgba(255,255,255,.14);border-radius:20px;padding:3px 9px;font-size:.72rem;display:flex;align-items:center;gap:4px}
 .schip button{background:none;border:none;color:rgba(255,255,255,.65);cursor:pointer;font-size:.85rem;line-height:1;padding:0}
- 
+
 /* FORMULES */
 .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media(min-width:480px){.fgrid{grid-template-columns:repeat(5,1fr)}}
@@ -101,7 +101,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .fprice{font-size:1.1rem;font-weight:700;color:var(--pink)}
 .fper{font-size:.62rem;color:var(--muted)}
 .fbadge{background:var(--pink-pale);color:var(--pink);font-size:.6rem;font-weight:700;padding:2px 5px;border-radius:9px;margin-top:3px;display:inline-block}
- 
+
 /* CALENDAR */
 .cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
 .cal-title{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--navy);text-transform:capitalize}
@@ -119,13 +119,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .cal-legend{display:flex;gap:12px;margin-top:9px;flex-wrap:wrap}
 .leg{display:flex;align-items:center;gap:4px;font-size:.7rem;color:var(--muted)}
 .ldot{width:9px;height:9px;border-radius:2px}
- 
+
 /* PRICE RECAP */
 .precap{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:12px;padding:13px 15px;color:#fff;margin-top:13px}
 .pr-row{display:flex;justify-content:space-between;font-size:.95rem;margin-bottom:7px;color:rgba(255,255,255,.85)}
 .pr-tot{display:flex;justify-content:space-between;font-size:1.2rem;font-weight:700;border-top:1px solid rgba(255,255,255,.2);padding-top:9px;margin-top:4px}
 .pr-save{color:var(--pink-light);font-weight:600}
- 
+
 /* LIVRAISON */
 .lvopts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
 .lvcard{border:2px solid var(--border);border-radius:12px;padding:13px;cursor:pointer;transition:all .2s;text-align:center}
@@ -134,7 +134,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .lv-title{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:4px}
 .lv-desc{font-size:.85rem;color:var(--muted);line-height:1.5}
 .lv-price{font-size:.88rem;font-weight:700;color:var(--pink);margin-top:5px}
- 
+
 /* FORM */
 .fgrp{margin-bottom:13px}
 .flbl{display:block;font-size:.92rem;font-weight:600;color:var(--navy);margin-bottom:6px}
@@ -144,7 +144,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 textarea.finp{resize:vertical;min-height:68px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 select.finp{cursor:pointer}
- 
+
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:13px 24px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;border:none}
 .btn-p{background:var(--navy);color:#fff;box-shadow:0 4px 14px rgba(30,43,94,.22)}
@@ -156,14 +156,14 @@ select.finp{cursor:pointer}
 .btn-sm{padding:5px 12px;font-size:.77rem;border-radius:7px}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
 .brow{display:flex;gap:9px;margin-top:16px}.brow .btn{flex:1}
- 
+
 /* SUCCESS */
 .success{text-align:center;padding:32px 14px}
 .s-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--success),#3A9B6A);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;box-shadow:0 8px 24px rgba(76,175,125,.28)}
 .success h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:9px}
 .success p{color:var(--muted);font-size:1rem;line-height:1.7}
 .res-ref-box{background:var(--blue-pale);border:2px solid var(--blue-light);border-radius:10px;padding:11px 18px;margin:14px 0;font-size:1.05rem;font-weight:700;color:var(--navy);letter-spacing:.07em}
- 
+
 /* ADMIN */
 .adm-hdr{background:var(--navy);padding:16px 18px;display:flex;align-items:center;justify-content:space-between}
 .adm-hdr h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.1rem}
@@ -186,7 +186,7 @@ select.finp{cursor:pointer}
 .ri-msg{background:var(--cream);border-radius:7px;padding:7px 10px;font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:9px}
 .ri-acts{display:flex;gap:7px;flex-wrap:wrap}
 .empty-st{text-align:center;padding:26px;color:var(--muted);font-size:.83rem}
- 
+
 /* GESTION APPAREILS */
 .ga-item{background:var(--white);border-radius:12px;border:1px solid var(--border);margin-bottom:9px;overflow:hidden;box-shadow:var(--shadow)}
 .ga-hd{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;background:var(--white);transition:background .2s}
@@ -204,7 +204,7 @@ select.finp{cursor:pointer}
 .ga-preview{width:80px;height:60px;object-fit:contain;border-radius:8px;background:var(--white);padding:4px;border:1px solid var(--border);margin-top:6px}
 .add-app-form{background:var(--white);border-radius:12px;border:2px dashed var(--border);padding:16px;margin-top:13px}
 .add-app-form .card-title{color:var(--muted)}
- 
+
 /* MODAL */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:200;align-items:center;justify-content:center;padding:13px}
 .modal-ov.open{display:flex}
@@ -212,12 +212,12 @@ select.finp{cursor:pointer}
 @keyframes mIn{from{transform:scale(.95) translateY(8px);opacity:0}to{transform:scale(1);opacity:1}}
 .modal h3{font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:7px}
 .modal p{font-size:.84rem;color:var(--muted);margin-bottom:16px;line-height:1.6}
- 
+
 /* TOAST */
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--navy);color:#fff;padding:9px 18px;border-radius:10px;font-size:.83rem;font-weight:500;z-index:300;transition:transform .3s ease;box-shadow:var(--shadow-lg);white-space:nowrap;max-width:90vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.ok{background:var(--success)}.toast.err{background:var(--danger)}
- 
+
 @media(max-width:460px){
   .hero h1{font-size:1.25rem}
   .agrid{grid-template-columns:repeat(2,1fr)}
@@ -230,7 +230,7 @@ select.finp{cursor:pointer}
 </style>
 </head>
 <body>
- 
+
 <nav class="nav">
   <div class="nav-logo">
     <img src="https://www.mesptitsservices.fr/web/image/website/1/logo/Mes%20p%27tits%20services%2044?unique=74b9100" alt="Logo" onerror="this.style.display='none'">
@@ -241,7 +241,7 @@ select.finp{cursor:pointer}
     <button class="nav-tab" onclick="switchView('admin',this)">🔐 Admin</button>
   </div>
 </nav>
- 
+
 <!-- ===== CLIENT ===== -->
 <div id="viewClient" class="view active">
   <div class="hero">
@@ -256,7 +256,7 @@ select.finp{cursor:pointer}
       <span class="hbadge">🎁 -15% dès le 2ème appareil</span>
     </div>
   </div>
- 
+
   <div class="ctr">
     <div class="steps" id="stepsBar">
       <div class="step active" id="s1"><div class="step-n">1</div><span>Appareils</span></div>
@@ -269,7 +269,7 @@ select.finp{cursor:pointer}
       <div class="step-line"></div>
       <div class="step" id="s5"><div class="step-n">5</div><span>Confirmation</span></div>
     </div>
- 
+
     <!-- STEP 1 -->
     <div id="cs1">
       <div class="banner"><div class="bi">🎁</div><div>Louez <strong>plusieurs appareils</strong> et économisez <em>-15% dès le 2ème article !</em></div></div>
@@ -292,7 +292,7 @@ select.finp{cursor:pointer}
         </a>
       </div>
     </div>
- 
+
     <!-- STEP 2 -->
     <div id="cs2" style="display:none">
       <div class="card">
@@ -318,7 +318,7 @@ select.finp{cursor:pointer}
         <button class="btn btn-p" onclick="goStep(3)" id="btnS2" disabled>Continuer →</button>
       </div>
     </div>
- 
+
     <!-- STEP 3 -->
     <div id="cs3" style="display:none">
       <div class="card">
@@ -344,7 +344,7 @@ select.finp{cursor:pointer}
         <button class="btn btn-p" onclick="goStep(4)" id="btnS3" disabled>Continuer →</button>
       </div>
     </div>
- 
+
     <!-- STEP 4 -->
     <div id="cs4" style="display:none">
       <div class="card">
@@ -366,7 +366,7 @@ select.finp{cursor:pointer}
         <button class="btn btn-p" onclick="submitRes()">Envoyer ma demande ✓</button>
       </div>
     </div>
- 
+
     <!-- STEP 5 -->
     <div id="cs5" style="display:none">
       <div class="card success">
@@ -380,7 +380,7 @@ select.finp{cursor:pointer}
     </div>
   </div>
 </div>
- 
+
 <!-- ===== ADMIN ===== -->
 <div id="viewAdmin" class="view">
   <div id="aLogin" style="max-width:300px;margin:46px auto;padding:0 13px">
@@ -388,10 +388,10 @@ select.finp{cursor:pointer}
       <div class="card-title">🔐 Administration</div>
       <div class="fgrp"><label class="flbl">Mot de passe</label><input type="password" id="aPwd" class="finp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
       <button class="btn btn-p" style="width:100%" onclick="doLogin()">Connexion</button>
- 
+
     </div>
   </div>
- 
+
   <div id="aDash" style="display:none">
     <div class="adm-hdr">
       <div><h2>Tableau de bord</h2><p id="aDateLbl"></p></div>
@@ -403,7 +403,7 @@ select.finp{cursor:pointer}
       <button class="atab" onclick="switchAdmTab('appareils',this)">📦 Appareils</button>
       <button class="atab" onclick="switchAdmTab('blocage',this)">🚫 Blocages</button>
     </div>
- 
+
     <!-- Tab: Réservations -->
     <div id="admTabRes">
       <div class="astats" id="aStats"></div>
@@ -416,7 +416,7 @@ select.finp{cursor:pointer}
         <div id="lstR"></div>
       </div>
     </div>
- 
+
     <!-- Tab: Appareils -->
     <div id="admTabApp" style="display:none">
       <div class="adm-ctr" style="padding-top:14px">
@@ -453,7 +453,7 @@ select.finp{cursor:pointer}
         </div>
       </div>
     </div>
- 
+
     <!-- Tab: Blocage -->
     <div id="admTabBloc" style="display:none">
       <div class="adm-ctr" style="padding-top:14px">
@@ -475,7 +475,7 @@ select.finp{cursor:pointer}
     </div>
   </div>
 </div>
- 
+
 <div class="modal-ov" id="modalOv">
   <div class="modal">
     <h3 id="mTitle">Confirmer</h3>
@@ -487,7 +487,7 @@ select.finp{cursor:pointer}
   </div>
 </div>
 <div class="toast" id="toast"></div>
- 
+
 <script>
 // ===================== DEFAULT DATA =====================
 const DEFAULT_APPAREILS = [
@@ -506,7 +506,7 @@ const DEFAULT_APPAREILS = [
   {id:13,cat:"tech",name:"Ordinateur portable Dell Inspiron 15",short:"Dell Inspiron 15",icon:"💻",img:"https://www.mesptitsservices.fr/web/image/1549-cab5616f/location%2520ordinateur%2520portable%2520dell%2520inspiron.svg",prices:{jour:12,deux:20,we:19,sem:34,mois:55},caution:150},
   {id:14,cat:"tech",name:"Ordinateur portable HP 17",short:"HP 17",icon:"💻",img:"https://www.mesptitsservices.fr/web/image/1548-e0a7eab0/hp-laptop-17-2021-black-1a.svg",prices:{jour:15,deux:26,we:24,sem:42,mois:69},caution:200},
 ];
- 
+
 const FORMULES = [
   {id:"jour",label:"Journée",dur:"1 jour"},
   {id:"deux",label:"2 jours",dur:"2 jours"},
@@ -514,7 +514,7 @@ const FORMULES = [
   {id:"sem",label:"Semaine",dur:"7 jours"},
   {id:"mois",label:"Mois",dur:"30 jours"},
 ];
- 
+
 // Helper: get local date string YYYY-MM-DD without UTC shift
 function localDate(date) {
   const y = date.getFullYear();
@@ -523,7 +523,7 @@ function localDate(date) {
   return `${y}-${m}-${d}`;
 }
 function localDateToday() { return localDate(new Date()); }
- 
+
 const CATS = [
   {id:"tous",label:"Tous"},
   {id:"nettoyage",label:"🧽 Nettoyage"},
@@ -532,25 +532,35 @@ const CATS = [
   {id:"festif",label:"🎉 Festif"},
   {id:"tech",label:"💻 Tech"},
 ];
- 
+
 // ===================== STORAGE =====================
-function loadApps() {
-  const stored = localStorage.getItem('mps_appareils');
-  return stored ? JSON.parse(stored) : JSON.parse(JSON.stringify(DEFAULT_APPAREILS));
+// appareils chargés depuis Firebase dans loadData()
+let appareils = JSON.parse(JSON.stringify(DEFAULT_APPAREILS));
+
+async function saveApps() {
+  localStorage.setItem('mps_appareils', JSON.stringify(appareils));
+  try {
+    await fetch(FB_URL + '/data.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reservations, blocked, appareils })
+    });
+    showToast('✅ Modifications synchronisées !', 'ok');
+  } catch(e) {
+    console.error('Erreur saveApps:', e);
+    showToast('⚠️ Sauvegardé localement uniquement.', 'err');
+  }
 }
-function saveApps() { localStorage.setItem('mps_appareils', JSON.stringify(appareils)); }
- 
-let appareils = loadApps();
 // ============================================================
 // STOCKAGE PARTAGÉ — Google Firebase Realtime Database
 // Base de données temps réel, gratuit, sans restriction CORS
 // ============================================================
 const FB_URL = 'https://app-reservation-fad8b-default-rtdb.europe-west1.firebasedatabase.app';
- 
+
 let reservations = [];
 let blocked = [];
 let isDataLoaded = false;
- 
+
 async function loadData() {
   try {
     showLoader(true);
@@ -560,6 +570,9 @@ async function loadData() {
       if(data) {
         reservations = data.reservations || [];
         blocked = data.blocked || [];
+        if(data.appareils && data.appareils.length > 0) {
+          appareils = data.appareils;
+        }
       }
     }
     isDataLoaded = true;
@@ -568,12 +581,14 @@ async function loadData() {
     // Fallback local
     reservations = JSON.parse(localStorage.getItem('mps_res') || '[]');
     blocked = JSON.parse(localStorage.getItem('mps_blocked') || '[]');
+    const storedApps = localStorage.getItem('mps_appareils');
+    if(storedApps) appareils = JSON.parse(storedApps);
     isDataLoaded = true;
   } finally {
     showLoader(false);
   }
 }
- 
+
 async function saveData() {
   localStorage.setItem('mps_res', JSON.stringify(reservations));
   localStorage.setItem('mps_blocked', JSON.stringify(blocked));
@@ -581,14 +596,14 @@ async function saveData() {
     await fetch(FB_URL + '/data.json', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reservations, blocked })
+      body: JSON.stringify({ reservations, blocked, appareils })
     });
   } catch(e) {
     console.error('Erreur sauvegarde:', e);
     showToast('⚠️ Sauvegardé localement uniquement.', 'err');
   }
 }
- 
+
 function showLoader(show) {
   let loader = document.getElementById('globalLoader');
   if(!loader) {
@@ -599,14 +614,14 @@ function showLoader(show) {
   }
   loader.style.opacity = show ? '1' : '0';
 }
- 
+
 // ===================== STATE =====================
 let selApps = [], selFormule = null, selLiv = null;
 let calY, calM, calStart = null, calEnd = null;
 let activeCat = 'tous';
 let isLogged = false;
 let activeAdmTab = 'reservations';
- 
+
 // ===================== NAV =====================
 function switchView(v, el) {
   document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
@@ -618,7 +633,7 @@ function switchView(v, el) {
     else { document.getElementById('aLogin').style.display='block'; document.getElementById('aDash').style.display='none'; }
   }
 }
- 
+
 // ===================== STEPS =====================
 function goStep(n) {
   for(let i=1;i<=5;i++){
@@ -632,7 +647,7 @@ function goStep(n) {
   if(n===4) renderRecap();
   window.scrollTo(0,0);
 }
- 
+
 // ===================== STEP 1 =====================
 function renderCatTabs() {
   document.getElementById('catTabs').innerHTML = CATS.map(c =>
@@ -640,7 +655,7 @@ function renderCatTabs() {
   ).join('');
 }
 function setCat(id) { activeCat=id; renderCatTabs(); renderApps(); }
- 
+
 function renderApps() {
   const list = activeCat==='tous' ? appareils : appareils.filter(a=>a.cat===activeCat);
   document.getElementById('aGrid').innerHTML = list.map(app => {
@@ -658,7 +673,7 @@ function renderApps() {
     </div>`;
   }).join('');
 }
- 
+
 function toggleApp(id) {
   if(isAppBusy(id)) return;
   const app = appareils.find(a=>a.id===id);
@@ -668,12 +683,12 @@ function toggleApp(id) {
   renderSelBar();
   document.getElementById('btnS1').disabled = selApps.length===0;
 }
- 
+
 function isAppBusy(id) {
   const today = localDateToday();
   return reservations.some(r => r.status==='confirmed' && r.appIds && r.appIds.includes(id) && r.dateStart<=today && r.dateEnd>=today);
 }
- 
+
 function renderSelBar() {
   const bar = document.getElementById('selBar');
   if(selApps.length===0) { bar.style.display='none'; return; }
@@ -683,14 +698,14 @@ function renderSelBar() {
     `<div class="schip">${a.icon} ${a.short} <button onclick="event.stopPropagation();toggleApp(${a.id})">×</button></div>`
   ).join('');
 }
- 
+
 // ===================== STEP 2 =====================
 function initStep2() {
   renderFormules();
   const now = new Date(); calY=now.getFullYear(); calM=now.getMonth();
   renderCal();
 }
- 
+
 function renderFormules() {
   document.getElementById('fGrid').innerHTML = FORMULES.map(f => {
     const t = calcTotal(f.id);
@@ -703,15 +718,16 @@ function renderFormules() {
     </div>`;
   }).join('');
 }
- 
+
 function calcTotal(fid) {
   if(!selApps.length) return null;
-  let total = 0;
-  selApps.forEach((app,i) => { total += i===0 ? app.prices[fid] : Math.round(app.prices[fid]*0.85); });
   const orig = selApps.reduce((s,a)=>s+a.prices[fid],0);
-  return {orig, final:total, saved:orig-total};
+  // -15% sur le total dès 2 appareils
+  const final = selApps.length > 1 ? Math.round(orig * 0.85 * 100) / 100 : orig;
+  const saved = Math.round((orig - final) * 100) / 100;
+  return {orig, final, saved};
 }
- 
+
 function selFml(id) {
   selFormule=id; calStart=null; calEnd=null;
   renderFormules();
@@ -720,10 +736,10 @@ function selFml(id) {
   updatePrRecap();
   document.getElementById('btnS2').disabled=true;
 }
- 
+
 const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 const JOURS = ['L','M','M','J','V','S','D'];
- 
+
 function getBusyDates() {
   const ids = selApps.map(a=>a.id);
   const busy = [];
@@ -737,9 +753,9 @@ function getBusyDates() {
   });
   return busy;
 }
- 
+
 function chM(d) { calM+=d; if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;} renderCal(); }
- 
+
 function renderCal() {
   document.getElementById('calLbl').textContent = MOIS[calM] + ' ' + calY;
   const grid = document.getElementById('calGrid');
@@ -767,7 +783,7 @@ function renderCal() {
     grid.appendChild(el);
   }
 }
- 
+
 function pickDate(ds) {
   if(!calStart||(calStart&&calEnd)){calStart=ds;calEnd=null;}
   else {
@@ -781,7 +797,7 @@ function pickDate(ds) {
   renderCal();
   updatePrRecap();
 }
- 
+
 function updatePrRecap() {
   const el=document.getElementById('prRecap');
   if(!selFormule||!calStart||!calEnd){el.style.display='none';return;}
@@ -790,16 +806,18 @@ function updatePrRecap() {
   const fmt=d=>new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
   let html=`<div class="pr-row"><span>Formule</span><span>${f.label}</span></div>
     <div class="pr-row"><span>Période</span><span>${fmt(calStart)} → ${fmt(calEnd)}</span></div>`;
-  selApps.forEach((app,i)=>{
+  selApps.forEach((app)=>{
     const p=app.prices[selFormule];
-    const disc=i>0?Math.round(p*0.85):p;
-    html+=`<div class="pr-row"><span>${app.icon} ${app.short}</span><span>${i>0?`<span class="pr-save">${disc}€ (-15%)</span>`:`${p}€`}</span></div>`;
+    html+=`<div class="pr-row"><span>${app.icon} ${app.short}</span><span>${p}€</span></div>`;
   });
-  if(t&&t.saved>0) html+=`<div class="pr-row pr-save"><span>🎁 Économie totale</span><span>-${t.saved}€</span></div>`;
+  if(t&&t.saved>0) {
+    html+=`<div class="pr-row"><span>Sous-total</span><span>${t.orig}€</span></div>`;
+    html+=`<div class="pr-row pr-save"><span>🎁 Remise -15% (multi-appareils)</span><span>-${t.saved}€</span></div>`;
+  }
   html+=`<div class="pr-tot"><span>Total location</span><span>${t?t.final:'?'}€</span></div>`;
   el.innerHTML=html; el.style.display='block';
 }
- 
+
 // ===================== STEP 3 =====================
 function setLiv(v) {
   selLiv=v;
@@ -813,7 +831,7 @@ function setLiv(v) {
   document.getElementById('adrGrp').style.display = v==='livraison'?'block':'none';
   document.getElementById('btnS3').disabled=false;
 }
- 
+
 // ===================== STEP 4 =====================
 function renderRecap() {
   if(!selFormule||!calStart||!calEnd) return;
@@ -829,7 +847,7 @@ function renderRecap() {
     <div class="rif"><span>Total location</span><strong style="color:var(--navy);font-size:.95rem">${t?t.final+'€':'—'}${t&&t.saved>0?` <span style="color:var(--pink);font-size:.78rem">(économie: ${t.saved}€)</span>`:''}</strong></div>
   </div>`;
 }
- 
+
 function submitRes() {
   const nom=document.getElementById('cNom').value.trim();
   const tel=document.getElementById('cTel').value.trim();
@@ -850,7 +868,7 @@ function submitRes() {
   document.getElementById('resRef').textContent=ref;
   goStep(5);
 }
- 
+
 function resetAll() {
   selApps=[];selFormule=null;selLiv=null;calStart=null;calEnd=null;
   ['cNom','cTel','cEmail','cAdr','cMsg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -858,7 +876,7 @@ function resetAll() {
   document.getElementById('btnS1').disabled=true;
   goStep(1);
 }
- 
+
 // ===================== ADMIN =====================
 function doLogin() {
   if(document.getElementById('aPwd').value==='julien44'){isLogged=true;showDash();}
@@ -879,7 +897,7 @@ function showDash() {
     renderAdmRes(); renderGAList(); renderBlocList(); populateBAppSelect();
   });
 }
- 
+
 function switchAdmTab(tab, el) {
   activeAdmTab=tab;
   document.querySelectorAll('.atab').forEach(x=>x.classList.remove('active'));
@@ -888,7 +906,7 @@ function switchAdmTab(tab, el) {
   document.getElementById('admTabApp').style.display=tab==='appareils'?'block':'none';
   document.getElementById('admTabBloc').style.display=tab==='blocage'?'block':'none';
 }
- 
+
 // --- Réservations ---
 function renderAdmRes() {
   const pending=reservations.filter(r=>r.status==='pending');
@@ -910,7 +928,7 @@ function renderAdmRes() {
   renderResList('lstC',confirmed,false);
   renderResList('lstR',refused,false);
 }
- 
+
 function renderResList(id,list,canAct) {
   const el=document.getElementById(id);
   if(!list.length){el.innerHTML='<div class="empty-st">Aucune réservation</div>';return;}
@@ -937,7 +955,7 @@ function renderResList(id,list,canAct) {
       </div>`:r.status==='confirmed'?`<div class="ri-acts"><button class="btn btn-del btn-sm" onclick="doAction('refuse','${r.id}')">Annuler</button></div>`:''}
     </div>`).join('');
 }
- 
+
 let pendingAction=null;
 function doAction(action,id){
   pendingAction={action,id};
@@ -955,7 +973,7 @@ document.getElementById('mBtn').onclick=function(){
   if(r){r.status=pendingAction.action==='confirm'?'confirmed':'refused';saveData();renderAdmRes();showToast(pendingAction.action==='confirm'?'✅ Confirmée !':'❌ Refusée.',pendingAction.action==='confirm'?'ok':'');}
   closeModal();
 };
- 
+
 // --- Gestion Appareils ---
 function renderGAList() {
   document.getElementById('gaList').innerHTML = appareils.map(app=>`
@@ -1000,7 +1018,7 @@ function renderGAList() {
       </div>
     </div>`).join('');
 }
- 
+
 function toggleGA(id) {
   const body=document.getElementById('gab'+id);
   const arr=document.getElementById('garr'+id);
@@ -1009,14 +1027,14 @@ function toggleGA(id) {
   document.querySelectorAll('.ga-arr').forEach(a=>a.textContent='▾');
   if(!open){body.classList.add('open');arr.textContent='▴';}
 }
- 
+
 function previewImg(id, url) {
   const prev=document.getElementById('gprev'+id);
   prev.style.display='block';
   prev.src=url;
   prev.onerror=()=>prev.style.display='none';
 }
- 
+
 function saveAppareil(id) {
   const app=appareils.find(a=>a.id===id);
   if(!app) return;
@@ -1024,11 +1042,11 @@ function saveAppareil(id) {
   app.short=g('short'); app.name=g('name'); app.img=g('img');
   app.cat=g('cat'); app.icon=g('icon');
   app.prices={jour:+g('jour'),deux:+g('deux'),we:+g('we'),sem:+g('sem'),mois:+g('mois')};
-  saveApps();
-  renderGAList(); renderApps();
-  showToast('✅ Appareil mis à jour !','ok');
+  saveApps().then(() => {
+    renderGAList(); renderApps();
+  });
 }
- 
+
 function deleteAppareil(id) {
   pendingAction={type:'deleteApp',id};
   const app=appareils.find(a=>a.id===id);
@@ -1038,14 +1056,14 @@ function deleteAppareil(id) {
   document.getElementById('mBtn').style.background='var(--danger)';
   document.getElementById('mBtn').onclick=function(){
     appareils=appareils.filter(a=>a.id!==id);
-    saveApps(); renderGAList(); renderApps(); populateBAppSelect();
+    saveApps().then(() => { renderGAList(); renderApps(); populateBAppSelect(); });
     showToast('🗑️ Appareil supprimé.','');
     closeModal(); pendingAction=null;
     document.getElementById('mBtn').onclick=defaultMBtnAction;
   };
   document.getElementById('modalOv').classList.add('open');
 }
- 
+
 function addAppareil() {
   const nom=document.getElementById('naNom').value.trim();
   const short=document.getElementById('naShort').value.trim();
@@ -1062,17 +1080,17 @@ function addAppareil() {
     img:document.getElementById('naImg').value.trim(),
     prices:{jour,deux,we,sem,mois}, caution:0
   });
-  saveApps(); renderGAList(); renderApps(); populateBAppSelect();
+  saveApps().then(() => { renderGAList(); renderApps(); populateBAppSelect(); });
   ['naNom','naShort','naIcon','naImg','naJ','na2j','naWe','naSem','naMois'].forEach(id=>{document.getElementById(id).value='';});
   showToast('✅ Appareil ajouté !','ok');
 }
- 
+
 // --- Blocage ---
 function populateBAppSelect() {
   const sel=document.getElementById('bApp');
   sel.innerHTML='<option value="">Choisir...</option>'+appareils.map(a=>`<option value="${a.id}">${a.icon} ${a.short}</option>`).join('');
 }
- 
+
 function doBlock() {
   const appId=+document.getElementById('bApp').value;
   const start=document.getElementById('bStart').value;
@@ -1084,7 +1102,7 @@ function doBlock() {
   showToast('✅ Dates bloquées !','ok');
   document.getElementById('bStart').value=''; document.getElementById('bEnd').value='';
 }
- 
+
 function renderBlocList() {
   const el=document.getElementById('blocList');
   if(!blocked.length){el.innerHTML='<div class="empty-st">Aucun blocage actif</div>';return;}
@@ -1100,20 +1118,20 @@ function renderBlocList() {
     </div>`;
   }).join('');
 }
- 
+
 function removeBlock(id) {
   blocked=blocked.filter(b=>b.id!==id);
   saveData(); renderBlocList();
   showToast('Blocage supprimé.','');
 }
- 
+
 // ===================== TOAST =====================
 function showToast(msg,type=''){
   const t=document.getElementById('toast');
   t.textContent=msg; t.className='toast show '+type;
   setTimeout(()=>t.classList.remove('show'),3200);
 }
- 
+
 // ===================== MODAL DEFAULT =====================
 function defaultMBtnAction(){
   if(!pendingAction)return;
@@ -1122,13 +1140,13 @@ function defaultMBtnAction(){
   closeModal();
 }
 document.getElementById('mBtn').onclick = defaultMBtnAction;
- 
+
 // ===================== STARTUP =====================
 loadData().then(() => {
   renderApps();
   renderSelBar();
 });
- 
+
 // ===================== VISITS TRACKING =====================
 (function trackVisit() {
   const total = parseInt(localStorage.getItem('mps_visits') || '0') + 1;
@@ -1142,7 +1160,7 @@ loadData().then(() => {
   // Clean up yesterday to avoid bloat (keep last 7 days)
   localStorage.setItem('mps_visits_today', todayCount);
 })();
- 
+
 // ===================== INIT =====================
 renderCatTabs();
 // renderApps() called after data loads above
