@@ -187,6 +187,26 @@ select.finp{cursor:pointer}
 .ri-acts{display:flex;gap:7px;flex-wrap:wrap}
 .empty-st{text-align:center;padding:26px;color:var(--muted);font-size:.83rem}
 
+/* OPTIONS & VARIANTS */
+.opt-step{background:var(--white);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:13px}
+.variant-grid{display:grid;gap:10px;margin-bottom:14px}
+.vcard{border:2px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;background:var(--white)}
+.vcard:hover{border-color:var(--blue)}.vcard.selected{border-color:var(--navy);background:var(--blue-pale)}
+.vcard-title{font-weight:700;font-size:.95rem;color:var(--navy);margin-bottom:2px}
+.vcard-sub{font-size:.8rem;color:var(--muted);margin-bottom:6px}
+.vcard-price{font-size:1rem;font-weight:700;color:var(--pink);margin-bottom:6px}
+.vcard-inclus{font-size:.76rem;color:var(--muted);line-height:1.5;background:var(--cream);border-radius:8px;padding:8px 10px}
+.opt-item{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border:2px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:all .2s;background:var(--white)}
+.opt-item:hover{border-color:var(--blue)}.opt-item.selected{border-color:var(--navy);background:var(--blue-pale)}
+.opt-label{font-size:.88rem;font-weight:500;color:var(--text)}
+.opt-price{font-size:.88rem;font-weight:700;color:var(--pink);flex-shrink:0;margin-left:10px}
+.opt-counter{display:flex;align-items:center;gap:8px}
+.opt-counter button{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--white);cursor:pointer;font-size:1rem;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.opt-counter button:hover{border-color:var(--navy);background:var(--navy);color:#fff}
+.opt-counter span{font-size:.95rem;font-weight:700;color:var(--navy);min-width:20px;text-align:center}
+.note-box{background:var(--pink-pale);border:1px solid var(--pink-light);border-radius:10px;padding:9px 12px;font-size:.82rem;color:var(--navy);margin-bottom:12px;line-height:1.5}
+.caution-box{background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:10px;padding:9px 12px;font-size:.84rem;color:var(--navy);margin-top:10px;display:flex;align-items:center;gap:7px}
+
 /* GESTION APPAREILS */
 .ga-item{background:var(--white);border-radius:12px;border:1px solid var(--border);margin-bottom:9px;overflow:hidden;box-shadow:var(--shadow)}
 .ga-hd{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;background:var(--white);transition:background .2s}
@@ -263,11 +283,13 @@ select.finp{cursor:pointer}
       <div class="step-line"></div>
       <div class="step" id="s2"><div class="step-n">2</div><span>Formule</span></div>
       <div class="step-line"></div>
-      <div class="step" id="s3"><div class="step-n">3</div><span>Livraison</span></div>
+      <div class="step" id="s25"><div class="step-n">3</div><span>Options</span></div>
       <div class="step-line"></div>
-      <div class="step" id="s4"><div class="step-n">4</div><span>Infos</span></div>
+      <div class="step" id="s3"><div class="step-n">4</div><span>Livraison</span></div>
       <div class="step-line"></div>
-      <div class="step" id="s5"><div class="step-n">5</div><span>Confirmation</span></div>
+      <div class="step" id="s4"><div class="step-n">5</div><span>Infos</span></div>
+      <div class="step-line"></div>
+      <div class="step" id="s5"><div class="step-n">6</div><span>Confirmation</span></div>
     </div>
 
     <!-- STEP 1 -->
@@ -315,7 +337,16 @@ select.finp{cursor:pointer}
       </div>
       <div class="brow">
         <button class="btn btn-s" onclick="goStep(1)">← Retour</button>
-        <button class="btn btn-p" onclick="goStep(3)" id="btnS2" disabled>Continuer →</button>
+        <button class="btn btn-p" onclick="goStep('25')" id="btnS2" disabled>Continuer →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2.5 OPTIONS -->
+    <div id="cs25" style="display:none">
+      <div id="optionsContent"></div>
+      <div class="brow">
+        <button class="btn btn-s" onclick="goStep(2)">← Retour</button>
+        <button class="btn btn-p" onclick="goStep(3)" id="btnS25">Continuer →</button>
       </div>
     </div>
 
@@ -491,17 +522,39 @@ select.finp{cursor:pointer}
 <script>
 // ===================== DEFAULT DATA =====================
 const DEFAULT_APPAREILS = [
-  {id:1,cat:"nettoyage",name:"Bissell SpotClean HydroSteam",short:"Bissell HydroSteam",icon:"🧽",img:"https://www.mesptitsservices.fr/web/image/1521-2d87f9ae/790.webp",prices:{jour:19,deux:32,we:29,sem:49,mois:79},caution:219},
+  {id:1,cat:"nettoyage",name:"Bissell SpotClean HydroSteam",short:"Bissell HydroSteam",icon:"🧽",img:"https://www.mesptitsservices.fr/web/image/1521-2d87f9ae/790.webp",prices:{jour:19,deux:32,we:29,sem:49,mois:79},caution:219,
+    note:"✅ 500ml de nettoyant inclus",
+    options:[{id:"nettoyant",label:"+ 250ml nettoyant supplémentaire",price:4,type:"checkbox"}]},
   {id:2,cat:"vitres",name:"Robot lave-vitres Abir WD8",short:"Abir WD8",icon:"🪟",img:"https://www.mesptitsservices.fr/web/image/691-df30de06/1000009865.png.webp",prices:{jour:12,deux:20,we:19,sem:34,mois:59},caution:99},
   {id:3,cat:"vitres",name:"Robot lave-vitres Ecovacs Winbot Mini",short:"Ecovacs Winbot Mini",icon:"🪟",img:"https://www.mesptitsservices.fr/web/image/1928-e4e3db86/091317_4438%242.webp",prices:{jour:17,deux:29,we:24,sem:42,mois:69},caution:199},
   {id:4,cat:"vitres",name:"Robot lave-vitres Puruikai",short:"Puruikai",icon:"🪟",img:"https://www.mesptitsservices.fr/web/image/1546-2ab48a3b/rn6.svg",prices:{jour:8,deux:14,we:13,sem:22,mois:36},caution:79},
-  {id:5,cat:"nettoyage",name:"Nettoyeur vapeur Kärcher SC1",short:"Kärcher SC1",icon:"💨",img:"https://www.mesptitsservices.fr/web/image/867-c047dacf/location%20karcher%20sc1.webp",prices:{jour:12,deux:20,we:19,sem:34,mois:55},caution:119},
-  {id:6,cat:"nettoyage",name:"Nettoyeur haute pression Kärcher K3",short:"Kärcher K3",icon:"💦",img:"https://www.mesptitsservices.fr/web/image/709-724edba0/61eUGg92q5L._AC_SL1500_.webp",prices:{jour:12,deux:20,we:19,sem:34,mois:55},caution:149},
+  {id:5,cat:"nettoyage",name:"Nettoyeur vapeur Kärcher SC1",short:"Kärcher SC1",icon:"💨",img:"https://www.mesptitsservices.fr/web/image/867-c047dacf/location%20karcher%20sc1.webp",prices:{jour:12,deux:20,we:19,sem:34,mois:55},caution:119,
+    options:[{id:"brosse_joints",label:"+ Brosse spéciale joints",price:5,type:"checkbox"}]},
+  {id:6,cat:"nettoyage",name:"Nettoyeur haute pression Kärcher K3",short:"Kärcher K3",icon:"💦",img:"https://www.mesptitsservices.fr/web/image/709-724edba0/61eUGg92q5L._AC_SL1500_.webp",prices:{jour:12,deux:20,we:19,sem:34,mois:55},caution:149,
+    options:[{id:"brosse_terrasse",label:"+ Brosse terrasse",price:5,type:"checkbox"}]},
   {id:7,cat:"sante",name:"Aspirateur matelas H.Koenig UMAT40",short:"H.Koenig UMAT40",icon:"🌬️",img:"https://www.mesptitsservices.fr/web/image/673-b28efdc8/Capture%20d%E2%80%99%C3%A9cran%202025-11-24%20131954.webp",prices:{jour:6,deux:10,we:10,sem:18,mois:29},caution:49},
   {id:8,cat:"sante",name:"Aspirateur matelas Kärcher VCH4 UVClean",short:"Kärcher VCH4",icon:"🌬️",img:"https://www.mesptitsservices.fr/web/image/2221-f120d0d2/d1.jpg",prices:{jour:9,deux:15,we:14,sem:24,mois:39},caution:119},
-  {id:9,cat:"nettoyage",name:"Injecteur-Extracteur Thomson THMSC1500",short:"Thomson THMSC1500",icon:"🧹",img:"https://www.mesptitsservices.fr/web/image/1545-76f777f0/location%2520shampouineuse%2520injecteur%2520extracteur%2520thomson%2520thmsc1500.svg",prices:{jour:8,deux:14,we:13,sem:22,mois:36},caution:79},
-  {id:10,cat:"festif",name:"Tireuse à bière Beer-Up",short:"Beer-Up",icon:"🍺",img:"https://www.mesptitsservices.fr/web/image/1581-d82016f1/Design%20sans%20titre%20%2832%29.png",prices:{jour:15,deux:26,we:25,sem:45,mois:75},caution:99},
-  {id:11,cat:"festif",name:"Machine à glace Deliciosa",short:"Machine à glace",icon:"🍦",img:"https://www.mesptitsservices.fr/web/image/2082-b467087a/ChatGPT%20Image%207%20avr.%202026%2C%2016_36_20.png",prices:{jour:29,deux:49,we:49,sem:79,mois:129},caution:299},
+  {id:9,cat:"nettoyage",name:"Injecteur-Extracteur Thomson THMSC1500",short:"Thomson THMSC1500",icon:"🧹",img:"https://www.mesptitsservices.fr/web/image/1545-76f777f0/location%2520shampouineuse%2520injecteur%2520extracteur%2520thomson%2520thmsc1500.svg",prices:{jour:8,deux:14,we:13,sem:22,mois:36},caution:79,
+    note:"✅ 500ml de nettoyant inclus",
+    options:[{id:"nettoyant",label:"+ 250ml nettoyant supplémentaire",price:4,type:"checkbox"}]},
+  {id:10,cat:"festif",name:"Tireuse à bière Beer-Up",short:"Beer-Up",icon:"🍺",img:"https://www.mesptitsservices.fr/web/image/1581-d82016f1/Design%20sans%20titre%20%2832%29.png",
+    prices:{jour:12,deux:20,we:20,sem:35,mois:60},caution:99,
+    variants:[
+      {id:"apero",label:"🍺 Formule Apéro",subtitle:"6 à 12 personnes · 1 Beer-Up ou Drink-Up",prices:{jour:12,deux:20,we:20,sem:35},caution:99,
+        inclus:"1 Beer-Up ou Drink-Up, 12 verres, 1 ceinture porte-verre, 4 accumulateurs de froid, 12 marqueurs de verres, 1 kit de remplissage"},
+      {id:"soiree",label:"🎉 Formule Soirée",subtitle:"1 Beer-Up ou Drink-Up avec accessoires",prices:{jour:17,deux:28,we:29,sem:49},caution:99,
+        inclus:"1 Beer-Up ou Drink-Up, 18 verres, 1 ceinture porte-verre, 1 plateau porte-verres, 4 accumulateurs de froid, 12 marqueurs, enceinte Bluetooth, 1 kit de remplissage"},
+      {id:"event",label:"🥳 Formule Événement",subtitle:"Les 2 tireuses pour vos grandes occasions",prices:{jour:29,deux:49,we:49,sem:69},caution:199,
+        inclus:"1 Beer-Up + 1 Drink-Up, 22 verres, 8 accumulateurs de froid, 1 ceinture porte-verres, 1 plateau porte-verres, 12 marqueurs, enceinte Bluetooth, 2 kits de remplissage"},
+    ],
+    note:"⚠️ Verre perdu ou abîmé : 2€/verre · Compatible fût Beertender 5L",
+    options:[{id:"verres_sup",label:"Verres supplémentaires",price:1,type:"counter",min:0,max:20,unit:"verre"}]},
+  {id:11,cat:"festif",name:"Machine à glace Deliciosa",short:"Machine à glace",icon:"🍦",img:"https://www.mesptitsservices.fr/web/image/2082-b467087a/ChatGPT%20Image%207%20avr.%202026%2C%2016_36_20.png",prices:{jour:29,deux:49,we:49,sem:79,mois:129},caution:299,
+    options:[
+      {id:"pack_service",label:"Pack Service – 20 pots + 20 gobelets granité + 40 cuillères",price:8,type:"checkbox"},
+      {id:"pack_gourmand",label:"Pack Gourmand – 20 pots + 20 gobelets granité + 40 cuillères",price:14,type:"checkbox"},
+    ],
+    note:"Accessoires supplémentaires disponibles sur demande"},
   {id:12,cat:"tech",name:"Smartphone Samsung Galaxy S10",short:"Samsung Galaxy S10",icon:"📱",img:"https://www.mesptitsservices.fr/web/image/1551-6f538312/location%2520samsung%2520galaxy%2520s10.svg",prices:{jour:7,deux:12,we:11,sem:19,mois:32},caution:50},
   {id:13,cat:"tech",name:"Ordinateur portable Dell Inspiron 15",short:"Dell Inspiron 15",icon:"💻",img:"https://www.mesptitsservices.fr/web/image/1549-cab5616f/location%2520ordinateur%2520portable%2520dell%2520inspiron.svg",prices:{jour:12,deux:20,we:19,sem:34,mois:55},caution:150},
   {id:14,cat:"tech",name:"Ordinateur portable HP 17",short:"HP 17",icon:"💻",img:"https://www.mesptitsservices.fr/web/image/1548-e0a7eab0/hp-laptop-17-2021-black-1a.svg",prices:{jour:15,deux:26,we:24,sem:42,mois:69},caution:200},
@@ -617,6 +670,8 @@ function showLoader(show) {
 
 // ===================== STATE =====================
 let selApps = [], selFormule = null, selLiv = null;
+let selVariants = {}; // {appId: variantId}
+let selOptions = {}; // {appId: {optId: value}}
 let calY, calM, calStart = null, calEnd = null;
 let activeCat = 'tous';
 let isLogged = false;
@@ -635,15 +690,22 @@ function switchView(v, el) {
 }
 
 // ===================== STEPS =====================
+const STEP_IDS = [1,2,'25',3,4,5];
+function stepIdx(n) { return STEP_IDS.indexOf(typeof n==='number'?n:n); }
+
 function goStep(n) {
-  for(let i=1;i<=5;i++){
-    document.getElementById('cs'+i).style.display = i===n ? 'block' : 'none';
+  STEP_IDS.forEach(i => {
+    const el = document.getElementById('cs'+i);
+    if(el) el.style.display = (i===n||i==n) ? 'block' : 'none';
     const s = document.getElementById('s'+i);
-    s.classList.remove('active','done');
-    if(i<n) s.classList.add('done'); else if(i===n) s.classList.add('active');
-  }
+    if(s){
+      s.classList.remove('active','done');
+      const ni = STEP_IDS.indexOf(i), cur = STEP_IDS.indexOf(n);
+      if(ni<cur) s.classList.add('done'); else if(i===n||i==n) s.classList.add('active');
+    }
+  });
   if(n===2) initStep2();
-  if(n===3) {} // livraison rendered on setLiv
+  if(n=='25'||n===25) renderOptions();
   if(n===4) renderRecap();
   window.scrollTo(0,0);
 }
@@ -721,8 +783,22 @@ function renderFormules() {
 
 function calcTotal(fid) {
   if(!selApps.length) return null;
-  const orig = selApps.reduce((s,a)=>s+a.prices[fid],0);
-  // -15% sur le total dès 2 appareils
+  let orig = 0;
+  selApps.forEach(app => {
+    // Use variant price if selected
+    if(app.variants && selVariants[app.id]) {
+      const v = app.variants.find(x=>x.id===selVariants[app.id]);
+      orig += v ? (v.prices[fid]||v.prices.jour) : app.prices[fid];
+    } else {
+      orig += app.prices[fid];
+    }
+    // Add options
+    if(app.options && selOptions[app.id]) {
+      app.options.forEach(opt => {
+        orig += opt.price * (selOptions[app.id][opt.id] || 0);
+      });
+    }
+  });
   const final = selApps.length > 1 ? Math.round(orig * 0.85 * 100) / 100 : orig;
   const saved = Math.round((orig - final) * 100) / 100;
   return {orig, final, saved};
@@ -819,6 +895,137 @@ function updatePrRecap() {
 }
 
 // ===================== STEP 3 =====================
+// ===================== STEP 2.5: OPTIONS =====================
+function hasOptionsOrVariants() {
+  return selApps.some(a => (a.variants && a.variants.length) || (a.options && a.options.length) || a.note);
+}
+
+function renderOptions() {
+  const container = document.getElementById('optionsContent');
+  if(!hasOptionsOrVariants()) { goStep(3); return; }
+  let html = '';
+  selApps.forEach(app => {
+    const hasVar = app.variants && app.variants.length > 0;
+    const hasOpt = app.options && app.options.length > 0;
+    if(!hasVar && !hasOpt && !app.note) return;
+    html += `<div class="opt-step"><div class="card-title">${app.icon} ${app.short}</div>`;
+    if(app.note) html += `<div class="note-box">ℹ️ ${app.note}</div>`;
+    // Variants (Beer-Up)
+    if(hasVar) {
+      html += `<p style="font-size:.85rem;color:var(--muted);margin-bottom:10px;font-weight:600">Choisissez votre formule :</p>`;
+      html += `<div class="variant-grid">`;
+      app.variants.forEach(v => {
+        const p = v.prices[selFormule] || v.prices.jour;
+        const sel = selVariants[app.id] === v.id;
+        html += `<div class="vcard${sel?' selected':''}" onclick="selVariant(${app.id},'${v.id}')">
+          <div class="vcard-title">${v.label}</div>
+          <div class="vcard-sub">${v.subtitle}</div>
+          <div class="vcard-price">${p}€ / ${selFormule}</div>
+          <div class="vcard-inclus">✅ Inclus : ${v.inclus}</div>
+          <div class="caution-box">🔐 Caution : ${v.caution}€ (non encaissée)</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+    // Options
+    if(hasOpt) {
+      html += `<p style="font-size:.85rem;color:var(--muted);margin-bottom:8px;font-weight:600;margin-top:${hasVar?'14px':'0'}">Options :</p>`;
+      app.options.forEach(opt => {
+        const curVal = selOptions[app.id]?.[opt.id] || 0;
+        const isChecked = curVal > 0;
+        if(opt.type === 'checkbox') {
+          html += `<div class="opt-item${isChecked?' selected':''}" onclick="toggleOption(${app.id},'${opt.id}')">
+            <span class="opt-label">${opt.label}</span>
+            <span class="opt-price">+${opt.price}€</span>
+          </div>`;
+        } else if(opt.type === 'counter') {
+          html += `<div class="opt-item" style="cursor:default">
+            <span class="opt-label">${opt.label} <span style="color:var(--muted);font-size:.78rem">(+${opt.price}€/${opt.unit||'unité'})</span></span>
+            <div class="opt-counter">
+              <button onclick="event.stopPropagation();changeCounter(${app.id},'${opt.id}',-1,${opt.min||0},${opt.max||99})">−</button>
+              <span>${curVal}</span>
+              <button onclick="event.stopPropagation();changeCounter(${app.id},'${opt.id}',1,${opt.min||0},${opt.max||99})">+</button>
+            </div>
+          </div>`;
+        }
+      });
+    }
+    // Caution (for non-variant apps)
+    if(!hasVar && app.caution) {
+      html += `<div class="caution-box">🔐 Caution : ${app.caution}€ (non encaissée — chèque ou espèces)</div>`;
+    }
+    html += `</div>`;
+  });
+  if(!html) { goStep(3); return; }
+  container.innerHTML = html;
+  checkOptionsValid();
+}
+
+function selVariant(appId, variantId) {
+  selVariants[appId] = variantId;
+  renderOptions();
+}
+
+function toggleOption(appId, optId) {
+  if(!selOptions[appId]) selOptions[appId] = {};
+  selOptions[appId][optId] = selOptions[appId][optId] ? 0 : 1;
+  renderOptions();
+}
+
+function changeCounter(appId, optId, delta, min, max) {
+  if(!selOptions[appId]) selOptions[appId] = {};
+  const cur = selOptions[appId][optId] || 0;
+  selOptions[appId][optId] = Math.max(min, Math.min(max, cur + delta));
+  renderOptions();
+}
+
+function checkOptionsValid() {
+  // Check all variant apps have a variant selected
+  const needsVariant = selApps.filter(a => a.variants && a.variants.length);
+  const allSelected = needsVariant.every(a => selVariants[a.id]);
+  document.getElementById('btnS25').disabled = !allSelected;
+}
+
+function calcOptionsTotal() {
+  let total = 0;
+  selApps.forEach(app => {
+    // Variant price override
+    if(app.variants && selVariants[app.id]) {
+      const v = app.variants.find(x=>x.id===selVariants[app.id]);
+      if(v) {
+        const vp = v.prices[selFormule] || v.prices.jour;
+        total += vp;
+        return; // skip base price for this app
+      }
+    }
+    // Options
+    if(app.options && selOptions[app.id]) {
+      app.options.forEach(opt => {
+        const val = selOptions[app.id][opt.id] || 0;
+        total += opt.price * val;
+      });
+    }
+  });
+  return total;
+}
+
+function getOptionsLabel() {
+  const lines = [];
+  selApps.forEach(app => {
+    if(app.variants && selVariants[app.id]) {
+      const v = app.variants.find(x=>x.id===selVariants[app.id]);
+      if(v) lines.push(`${app.short} → ${v.label}`);
+    }
+    if(app.options && selOptions[app.id]) {
+      app.options.forEach(opt => {
+        const val = selOptions[app.id][opt.id] || 0;
+        if(val > 0) lines.push(`${opt.label} ×${val===1?'':val} (+${opt.price*val}€)`);
+      });
+    }
+  });
+  return lines;
+}
+
 function setLiv(v) {
   selLiv=v;
   document.getElementById('lv1').classList.toggle('selected',v==='livraison');
@@ -838,13 +1045,23 @@ function renderRecap() {
   const t=calcTotal(selFormule);
   const f=FORMULES.find(x=>x.id===selFormule);
   const fmt=d=>new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  const optLines = getOptionsLabel();
+  const cautionTotal = selApps.reduce((s,app) => {
+    if(app.variants && selVariants[app.id]) {
+      const v = app.variants.find(x=>x.id===selVariants[app.id]);
+      return s + (v?v.caution:app.caution||0);
+    }
+    return s + (app.caution||0);
+  }, 0);
   document.getElementById('recapContent').innerHTML=`<div style="display:grid;gap:7px">
     <div class="rif"><span>Appareils</span><strong>${selApps.map(a=>a.icon+' '+a.short).join(', ')}</strong></div>
+    ${optLines.length?`<div class="rif"><span>Options / Variantes</span><strong>${optLines.join('<br>')}</strong></div>`:''}
     <div class="rif"><span>Formule</span><strong>${f.label} (${f.dur})</strong></div>
     <div class="rif"><span>Du</span><strong>${fmt(calStart)}</strong></div>
     <div class="rif"><span>Au</span><strong>${fmt(calEnd)}</strong></div>
     <div class="rif"><span>Mode</span><strong>${selLiv==='livraison'?'🚚 Livraison à domicile (tarif par email)':'🏠 Retrait à Séverac (gratuit)'}</strong></div>
     <div class="rif"><span>Total location</span><strong style="color:var(--navy);font-size:.95rem">${t?t.final+'€':'—'}${t&&t.saved>0?` <span style="color:var(--pink);font-size:.78rem">(économie: ${t.saved}€)</span>`:''}</strong></div>
+    ${cautionTotal?`<div class="caution-box" style="margin-top:4px">🔐 Caution totale : <strong>${cautionTotal}€</strong> non encaissée (chèque ou espèces)</div>`:''}
   </div>`;
 }
 
@@ -860,6 +1077,9 @@ function submitRes() {
   reservations.unshift({
     id:ref,nom,tel,email,adresse:adr,message:document.getElementById('cMsg').value.trim(),
     appIds:selApps.map(a=>a.id),appNames:selApps.map(a=>a.short),
+    variants:JSON.parse(JSON.stringify(selVariants)),
+    options:JSON.parse(JSON.stringify(selOptions)),
+    optionsLabel:getOptionsLabel(),
     formule:selFormule,dateStart:calStart,dateEnd:calEnd,
     livraison:selLiv,total:t?t.final:0,saved:t?t.saved:0,
     status:'pending',createdAt:new Date().toISOString()
@@ -870,7 +1090,7 @@ function submitRes() {
 }
 
 function resetAll() {
-  selApps=[];selFormule=null;selLiv=null;calStart=null;calEnd=null;
+  selApps=[];selFormule=null;selLiv=null;calStart=null;calEnd=null;selVariants={};selOptions={};
   ['cNom','cTel','cEmail','cAdr','cMsg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   renderCatTabs();renderApps();renderSelBar();
   document.getElementById('btnS1').disabled=true;
@@ -879,7 +1099,7 @@ function resetAll() {
 
 // ===================== ADMIN =====================
 function doLogin() {
-  if(document.getElementById('aPwd').value==='julien44'){isLogged=true;showDash();}
+  if(document.getElementById('aPwd').value==='Leo44320sppr!'){isLogged=true;showDash();}
   else showToast('Mot de passe incorrect.','err');
 }
 function doLogout() {
@@ -944,6 +1164,7 @@ function renderResList(id,list,canAct) {
         <div class="rif"><span>Formule</span><strong>${r.formule}</strong></div>
         <div class="rif"><span>Période</span><strong>${fmt(r.dateStart)} → ${fmt(r.dateEnd)}</strong></div>
         <div class="rif"><span>Total</span><strong>${r.total}€${r.saved>0?` (-${r.saved}€)`:''}</strong></div>
+        ${(r.optionsLabel&&r.optionsLabel.length)?`<div class="rif" style="grid-column:1/-1"><span>Options</span><strong>${r.optionsLabel.join(', ')}</strong></div>`:''}
         <div class="rif"><span>Tel</span><strong><a href="tel:${r.tel}" style="color:var(--navy)">${r.tel}</a></strong></div>
         <div class="rif"><span>Email</span><strong style="font-size:.74rem">${r.email}</strong></div>
         <div class="rif" style="grid-column:1/-1"><span>Livraison</span><strong>${r.livraison==='livraison'?'🚚 À domicile : '+r.adresse:'🏠 Retrait Séverac'}</strong></div>
