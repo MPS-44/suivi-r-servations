@@ -141,6 +141,19 @@ textarea.field-input{resize:vertical;min-height:70px;}
 .toast.error{background:var(--rouge);}
 
 .caution-note{font-size:0.74rem;color:var(--subtil);margin-top:0.5rem;text-align:center;}
+.options-section{background:var(--blanc);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem;}
+.options-title{font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ardoise);margin-bottom:0.8rem;}
+.option-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.option-row:last-child{border:none;}
+.option-row-label{font-size:0.85rem;font-weight:600;color:var(--texte);}
+.option-row-prix{font-size:0.75rem;color:var(--rose);font-weight:600;margin-top:1px;}
+.opt-btns{display:flex;gap:6px;flex-shrink:0;}
+.opt-btn{background:var(--blanc);border:1.5px solid var(--border);border-radius:6px;padding:5px 14px;font-family:"DM Sans",sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;color:var(--subtil);transition:all 0.15s;}
+.opt-btn.active{background:var(--ardoise);border-color:var(--ardoise);color:var(--blanc);}
+.opt-qty{display:flex;align-items:center;gap:8px;}
+.opt-qty-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--blanc);font-size:0.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.opt-qty-btn:hover{border-color:var(--ardoise);}
+.opt-qty-val{font-weight:700;font-size:0.9rem;min-width:18px;text-align:center;}
 .error-screen{text-align:center;padding:3rem 1rem;color:var(--subtil);}
 .error-screen h3{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--texte);margin-bottom:0.5rem;}
 </style>
@@ -185,6 +198,7 @@ textarea.field-input{resize:vertical;min-height:70px;}
         <div class="prix-live-val" id="prix-val"></div>
       </div>
     </div>
+    <div id="options-wrap"></div>
     <button class="btn-primary" id="btn-step1" onclick="goStep(2)" disabled>Choisir la livraison →</button>
     <a id="btn-wa" href="#" class="btn-wa">💬 Réserver par WhatsApp</a>
   </div>
@@ -371,6 +385,72 @@ function selectVariante(id){
 // ══════════════════════════════════════
 // CALCUL PRIX
 // ══════════════════════════════════════
+
+// ══════════════════════════════════════
+// OPTIONS
+// ══════════════════════════════════════
+let optionsState = {}; // {optId: valeur}
+
+function renderOptions(){
+  const wrap = document.getElementById('options-wrap');
+  if(!APP.options || !APP.options.length){ wrap.innerHTML=''; return; }
+  // Init state si vide
+  APP.options.forEach(opt=>{ if(optionsState[opt.id]===undefined) optionsState[opt.id]=0; });
+  let html = `<div class="options-section"><div class="options-title">Options disponibles</div>`;
+  APP.options.forEach(opt=>{
+    const val = optionsState[opt.id]||0;
+    if(opt.type==='bool'){
+      html+=`<div class="option-row">
+        <div><div class="option-row-label">${opt.label}</div><div class="option-row-prix">+ ${opt.prix} €</div></div>
+        <div class="opt-btns">
+          <button class="opt-btn${!val?' active':''}" onclick="setOpt('${opt.id}',0)">Non</button>
+          <button class="opt-btn${val?' active':''}" onclick="setOpt('${opt.id}',1)">Oui</button>
+        </div>
+      </div>`;
+    } else {
+      html+=`<div class="option-row">
+        <div><div class="option-row-label">${opt.label}</div><div class="option-row-prix">${opt.prix} €/unité</div></div>
+        <div class="opt-qty">
+          <button class="opt-qty-btn" onclick="changeOpt('${opt.id}',-1)">−</button>
+          <span class="opt-qty-val">${val}</span>
+          <button class="opt-qty-btn" onclick="changeOpt('${opt.id}',1)">+</button>
+        </div>
+      </div>`;
+    }
+  });
+  html+='</div>';
+  wrap.innerHTML=html;
+}
+
+function setOpt(id, val){
+  optionsState[id]=val;
+  renderOptions();
+  updatePrixLive();
+}
+
+function changeOpt(id, delta){
+  optionsState[id]=Math.max(0,(optionsState[id]||0)+delta);
+  renderOptions();
+  updatePrixLive();
+}
+
+function getPrixOptions(){
+  if(!APP.options) return 0;
+  let total=0;
+  APP.options.forEach(opt=>{ total+=(optionsState[opt.id]||0)*opt.prix; });
+  return total;
+}
+
+function getOptionsStr(){
+  if(!APP.options) return '';
+  let parts=[];
+  APP.options.forEach(opt=>{
+    const val=optionsState[opt.id]||0;
+    if(val) parts.push(`${opt.label}${opt.type==='qty'?` ×${val}`:''} (+${val*opt.prix}€)`);
+  });
+  return parts.length ? ' | Options: '+parts.join(', ') : '';
+}
+
 function getPrixAppareil(nbj){
   let p1, p3, p4;
   if(S.varianteId && APP.variantes && APP.variantes.length){
@@ -408,16 +488,19 @@ function updatePrixLive(){
   // Vérifier variante requise
   if(APP.variantes && APP.variantes.length && !S.varianteId) return;
   const nbj = S.nbJours;
-  const prix = getPrixAppareil(nbj);
-  S.prix = prix;
+  const prixBase = getPrixAppareil(nbj);
+  const prixOpts = getPrixOptions();
+  S.prix = prixBase + prixOpts;
   const[dy,dm,dd]=S.dateDebut.split('-');
   const[fy,fm,fd]=S.dateFin.split('-');
   const rangeStr = nbj===1 ? `Le ${dd}/${dm}/${dy}` : `Du ${dd}/${dm}/${dy} au ${fd}/${fm}/${fy}`;
   document.getElementById('prix-label').textContent = `${rangeStr} — ${nbj} jour${nbj>1?'s':''}`;
-  document.getElementById('prix-val').textContent = prix + '€';
-  document.getElementById('prix-detail').textContent = getPrixDetail(nbj);
+  document.getElementById('prix-val').textContent = S.prix + '€';
+  document.getElementById('prix-detail').textContent = getPrixDetail(nbj)+(prixOpts?` + ${prixOpts}€ options`:'');
   document.getElementById('prix-live').style.display = 'block';
   document.getElementById('btn-step1').disabled = false;
+  // Afficher les options si l'appareil en a
+  renderOptions();
 }
 
 // ══════════════════════════════════════
@@ -571,6 +654,7 @@ async function sendResa(){
     const v=APP.variantes.find(x=>x.id===S.varianteId);
     if(v) appStr+=` — ${v.nom}`;
   }
+  appStr += getOptionsStr();
   const ref='MPS-'+Math.random().toString(36).substr(2,6).toUpperCase();
   showLoading('Envoi en cours…');
   try{
