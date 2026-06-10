@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réservation — Mes p'tits Services 44</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{--bleu:#91b5c3;--rose:#d9979b;--creme:#f4eee7;--ardoise:#515f71;--blanc:#ffffff;--vert:#5a9e7a;--rouge:#c0544f;--texte:#2c3540;--subtil:#8a96a3;--border:#e4ddd5;--bg:#f9f5f0;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texte);font-size:15px;line-height:1.6;}
+.widget{max-width:560px;margin:0 auto;padding:1.5rem 1rem;}
+
+/* APP HEADER */
+.app-header{background:var(--blanc);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:12px;}
+.app-thumb{width:56px;height:56px;border-radius:8px;object-fit:cover;background:var(--creme);flex-shrink:0;}
+.app-thumb-ph{width:56px;height:56px;border-radius:8px;background:var(--creme);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.app-info-name{font-weight:700;font-size:0.92rem;color:var(--texte);margin-bottom:2px;}
+.app-info-cat{font-size:0.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--bleu);}
+
+/* TARIFS */
+.tarifs-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.2rem;}
+.tarif-pill{background:var(--blanc);border:1.5px solid var(--border);border-radius:10px;padding:0.7rem 0.5rem;text-align:center;}
+.tarif-pill.best{border-color:var(--rose);background:#fff8f8;}
+.tarif-label{font-size:0.63rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--bleu);margin-bottom:2px;}
+.tarif-prix{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--texte);}
+.tarif-detail{font-size:0.63rem;color:var(--subtil);margin-top:1px;}
+
+/* VARIANTES */
+.variantes-section{margin-bottom:1.2rem;}
+.variantes-label{font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ardoise);margin-bottom:0.6rem;}
+.variantes-list{display:flex;flex-direction:column;gap:8px;}
+.variante-item{background:var(--blanc);border:1.5px solid var(--border);border-radius:10px;padding:0.9rem 1rem;cursor:pointer;transition:all 0.18s;}
+.variante-item:hover{border-color:var(--bleu);}
+.variante-item.selected{border-color:var(--rose);background:#fff8f8;}
+.variante-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.variante-nom{font-weight:700;font-size:0.88rem;color:var(--texte);}
+.variante-prix-tag{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--ardoise);white-space:nowrap;}
+.variante-sous{font-size:0.72rem;color:var(--subtil);margin-top:2px;}
+
+/* CAL */
+.hint{font-size:0.75rem;color:var(--subtil);margin-bottom:0.8rem;text-align:center;}
+.cal-box{background:var(--blanc);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1.2rem;border-bottom:1px solid var(--border);}
+.cal-title{font-family:'DM Serif Display',serif;font-size:0.95rem;color:var(--texte);}
+.cal-nav-btn{background:none;border:1px solid var(--border);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;transition:all 0.15s;color:var(--texte);}
+.cal-nav-btn:hover{background:var(--creme);}
+.cal-grid{padding:0.8rem 1rem 1rem;}
+.cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
+.cal-dh{text-align:center;font-size:0.62rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--subtil);padding:3px 0;}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-day{aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;cursor:pointer;transition:all 0.12s;position:relative;}
+.cal-day:hover:not(.cal-empty):not(.cal-past):not(.cal-booked){background:var(--creme);}
+.cal-day.cal-empty,.cal-day.cal-past{cursor:default;}
+.cal-day.cal-past{color:#ccc;}
+.cal-day.cal-today{font-weight:700;color:var(--ardoise);}
+.cal-day.cal-today::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--bleu);}
+.cal-day.cal-selected{background:var(--ardoise);color:var(--blanc);font-weight:600;}
+.cal-day.cal-in-range{background:rgba(145,181,195,0.18);border-radius:0;}
+.cal-day.cal-booked{background:#fef0f0;color:#c8a0a0;cursor:not-allowed;text-decoration:line-through;}
+.cal-legend{display:flex;gap:10px;flex-wrap:wrap;padding:0 1rem 0.8rem;font-size:0.68rem;color:var(--subtil);}
+.cal-legend-item{display:flex;align-items:center;gap:4px;}
+.cal-dot{width:9px;height:9px;border-radius:2px;}
+
+/* PRIX LIVE */
+.prix-live{background:var(--blanc);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1.2rem;margin-bottom:1rem;display:none;}
+.prix-live-row{display:flex;justify-content:space-between;align-items:center;}
+.prix-live-label{font-size:0.82rem;color:var(--subtil);}
+.prix-live-val{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--rose);}
+.prix-live-detail{font-size:0.72rem;color:var(--vert);font-weight:600;margin-top:2px;}
+
+/* LIVRAISON */
+.livraison-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.livraison-card{background:var(--blanc);border:1.5px solid var(--border);border-radius:10px;padding:1rem;cursor:pointer;transition:all 0.18s;}
+.livraison-card:hover{border-color:var(--bleu);}
+.livraison-card.selected{border-color:var(--rose);background:#fff8f8;}
+.livraison-icon{font-size:1.3rem;margin-bottom:0.4rem;}
+.livraison-title{font-size:0.82rem;font-weight:600;color:var(--texte);margin-bottom:2px;}
+.livraison-desc{font-size:0.7rem;color:var(--subtil);line-height:1.4;}
+.livraison-price{font-size:0.7rem;font-weight:600;color:var(--rose);margin-top:6px;}
+
+/* FORM */
+.field{margin-bottom:0.9rem;}
+.field-label{display:block;font-size:0.68rem;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--ardoise);margin-bottom:5px;}
+.field-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--texte);background:var(--blanc);transition:border-color 0.18s;}
+.field-input:focus{outline:none;border-color:var(--bleu);}
+.field-input::placeholder{color:#bbb;}
+textarea.field-input{resize:vertical;min-height:70px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:400px){.field-row{grid-template-columns:1fr;}}
+
+/* RECAP */
+.recap-box{background:var(--blanc);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem;}
+.recap-row{display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border);font-size:0.82rem;}
+.recap-row:last-child{border:none;}
+.recap-label{color:var(--subtil);}
+.recap-val{font-weight:600;color:var(--texte);}
+.recap-total .recap-label{font-weight:700;color:var(--texte);}
+.recap-total .recap-val{color:var(--rose);font-size:1rem;}
+
+/* BTNS */
+.btn-primary{background:var(--ardoise);color:var(--blanc);border:none;padding:13px 24px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;width:100%;margin-top:0.5rem;}
+.btn-primary:hover:not(:disabled){background:#3d4f60;}
+.btn-primary:disabled{background:#ccc;cursor:not-allowed;}
+.btn-ghost{background:none;border:1.5px solid var(--border);color:var(--texte);padding:10px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;width:100%;margin-top:0.5rem;}
+.btn-ghost:hover{border-color:var(--ardoise);}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:7px;background:#25d366;color:var(--blanc);text-decoration:none;padding:11px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;margin-top:0.5rem;}
+
+/* STEPS */
+.step{display:none;animation:fadeUp 0.2s ease;}
+.step.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* PROGRESS */
+.progress{display:flex;align-items:center;margin-bottom:1.4rem;}
+.prog-step{display:flex;align-items:center;gap:6px;font-size:0.68rem;font-weight:600;color:var(--border);text-transform:uppercase;letter-spacing:0.3px;flex:1;}
+.prog-step.active{color:var(--texte);}
+.prog-step.done{color:var(--vert);}
+.prog-num{width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--blanc);font-size:0.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s;}
+.prog-step.active .prog-num{background:var(--ardoise);}
+.prog-step.done .prog-num{background:var(--vert);}
+.prog-sep{height:1px;background:var(--border);flex:0 0 10px;margin-right:3px;}
+@media(max-width:380px){.prog-step span{display:none;}.prog-step{flex:0 0 auto;}}
+
+/* SUCCESS */
+.success{text-align:center;padding:2rem 0;}
+.success-badge{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--vert);margin-bottom:1.2rem;}
+.success-badge svg{width:24px;height:24px;stroke:var(--blanc);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.success h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:0.4rem;}
+.success p{color:var(--subtil);font-size:0.87rem;line-height:1.6;margin-bottom:1rem;}
+.success-ref{display:inline-block;border:2px dashed var(--bleu);border-radius:8px;padding:0.6rem 1.5rem;font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--ardoise);letter-spacing:2px;margin-bottom:1rem;}
+
+/* LOADING / TOAST */
+.loading-overlay{position:fixed;inset:0;background:rgba(249,245,240,0.88);display:none;align-items:center;justify-content:center;z-index:500;}
+.loading-overlay.show{display:flex;}
+.loading-box{background:var(--blanc);border:1px solid var(--border);border-radius:12px;padding:1.8rem 2rem;text-align:center;}
+.loading-box p{margin-top:0.6rem;color:var(--subtil);font-size:0.85rem;}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--texte);color:var(--blanc);padding:10px 18px;border-radius:8px;font-size:0.8rem;font-weight:600;z-index:999;opacity:0;transform:translateY(8px);transition:all 0.22s;pointer-events:none;max-width:280px;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.success{background:var(--vert);}
+.toast.error{background:var(--rouge);}
+
+.caution-note{font-size:0.74rem;color:var(--subtil);margin-top:0.5rem;text-align:center;}
+.error-screen{text-align:center;padding:3rem 1rem;color:var(--subtil);}
+.error-screen h3{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--texte);margin-bottom:0.5rem;}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="loading-box"><div style="font-size:1.3rem;">⏳</div><p id="loading-msg">Chargement…</p></div>
+</div>
+
+<div class="widget">
+  <div class="progress" id="progress"></div>
+
+  <!-- STEP 1 : DATES -->
+  <div class="step active" id="step1">
+    <div id="app-header-wrap"></div>
+    <div id="tarifs-wrap"></div>
+    <div id="variantes-wrap"></div>
+    <p class="hint">1er clic = début · 2e clic = fin · Même date = journée</p>
+    <div class="cal-box">
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+        <div class="cal-title" id="cal-title"></div>
+        <button class="cal-nav-btn" onclick="calNext()">›</button>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-days-header" id="cal-dh"></div>
+        <div class="cal-days" id="cal-days"></div>
+      </div>
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-dot" style="background:var(--ardoise);"></div>Sélectionné</div>
+        <div class="cal-legend-item"><div class="cal-dot" style="background:rgba(145,181,195,0.25);border:1px solid var(--bleu);"></div>Période</div>
+        <div class="cal-legend-item"><div class="cal-dot" style="background:#fef0f0;border:1px solid #c8a0a0;"></div>Indisponible</div>
+      </div>
+    </div>
+    <div class="prix-live" id="prix-live">
+      <div class="prix-live-row">
+        <div>
+          <div class="prix-live-label" id="prix-label"></div>
+          <div class="prix-live-detail" id="prix-detail"></div>
+        </div>
+        <div class="prix-live-val" id="prix-val"></div>
+      </div>
+    </div>
+    <button class="btn-primary" id="btn-step1" onclick="goStep(2)" disabled>Choisir la livraison →</button>
+    <a id="btn-wa" href="#" class="btn-wa">💬 Réserver par WhatsApp</a>
+  </div>
+
+  <!-- STEP 2 : LIVRAISON -->
+  <div class="step" id="step2">
+    <div class="livraison-grid">
+      <div class="livraison-card" onclick="selectLiv(this,'livraison')">
+        <div class="livraison-icon">🚚</div>
+        <div class="livraison-title">Livraison à domicile</div>
+        <div class="livraison-desc">Julien vous livre et explique le fonctionnement.</div>
+        <div class="livraison-price">+ 3 à 8 € selon distance</div>
+      </div>
+      <div class="livraison-card" onclick="selectLiv(this,'retrait')">
+        <div class="livraison-icon">🏠</div>
+        <div class="livraison-title">Retrait sur place</div>
+        <div class="livraison-desc">8a La Combe, 44530 Séverac.</div>
+        <div class="livraison-price">Gratuit</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="btn-step2" onclick="goStep(3)" disabled>Mes coordonnées →</button>
+    <button class="btn-ghost" onclick="goStep(1)">← Retour</button>
+  </div>
+
+  <!-- STEP 3 : COORDONNÉES -->
+  <div class="step" id="step3">
+    <div class="field-row">
+      <div class="field"><label class="field-label">Nom *</label><input class="field-input" id="f-nom" type="text" placeholder="Jean Dupont"></div>
+      <div class="field"><label class="field-label">Téléphone *</label><input class="field-input" id="f-tel" type="tel" placeholder="06 12 34 56 78"></div>
+    </div>
+    <div class="field"><label class="field-label">Email *</label><input class="field-input" id="f-email" type="email" placeholder="jean@email.com"></div>
+    <div class="field" id="f-adresse-wrap" style="display:none;"><label class="field-label">Adresse de livraison *</label><input class="field-input" id="f-adresse" type="text" placeholder="12 rue des Lilas, 44160 Pontchâteau"></div>
+    <div class="field"><label class="field-label">Message (optionnel)</label><textarea class="field-input" id="f-message" placeholder="Précisions, questions…"></textarea></div>
+    <div style="font-family:'DM Serif Display',serif;font-size:1rem;margin:1rem 0 0.6rem;">Récapitulatif</div>
+    <div class="recap-box" id="recap-box"></div>
+    <p class="caution-note" id="caution-note"></p>
+    <button class="btn-primary" onclick="sendResa()">Envoyer ma demande ✓</button>
+    <button class="btn-ghost" onclick="goStep(2)">← Retour</button>
+  </div>
+
+  <!-- STEP 4 : SUCCESS -->
+  <div class="step" id="step4">
+    <div class="success">
+      <div class="success-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+      <h3>Demande envoyée !</h3>
+      <p>Julien vous contactera rapidement pour confirmer votre réservation.</p>
+      <div class="success-ref" id="success-ref">MPS-XXXXX</div>
+      <p style="font-size:0.75rem;color:var(--subtil);">Paiement à la livraison · Aucun acompte</p>
+    </div>
+  </div>
+
+  <!-- ERREUR -->
+  <div class="step" id="step-error">
+    <div class="error-screen">
+      <h3>Appareil introuvable</h3>
+      <p>Impossible de charger cet appareil.<br>Contactez-nous directement.</p>
+      <a href="https://wa.me/33775719334" class="btn-wa" style="margin-top:1rem;">💬 WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════
+const CFG = {
+  airtableToken: 'pat3LkLurCA57VRfW.b640bb07fc566963ce719ebc00cbdf091f2799fc640b1b255c92e85d26e47811',
+  airtableBase:  'apprJQe8PtxNk4F1s',
+};
+const AT_RESA = `https://api.airtable.com/v0/${CFG.airtableBase}/Reservation`;
+const AT_APP  = `https://api.airtable.com/v0/${CFG.airtableBase}/Appareils`;
+const AT_HDR  = {'Authorization':`Bearer ${CFG.airtableToken}`,'Content-Type':'application/json'};
+const AT_GET  = {'Authorization':`Bearer ${CFG.airtableToken}`};
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+let APP = null; // données de l'appareil chargé
+let S = {
+  step: 1,
+  varianteId: null,
+  dateDebut: null,
+  dateFin: null,
+  nbJours: null,
+  prix: null,
+  livraison: null,
+};
+let resasCache = [];
+
+// ══════════════════════════════════════
+// URL PARAM
+// ══════════════════════════════════════
+function getParam(key){
+  return new URLSearchParams(window.location.search).get(key);
+}
+
+// ══════════════════════════════════════
+// CHARGER APPAREIL DEPUIS AIRTABLE
+// ══════════════════════════════════════
+async function loadAppareil(appId){
+  // Cherche dans Airtable par le champ "id"
+  const url = AT_APP + `?filterByFormula={id}="${encodeURIComponent(appId)}"`;
+  const r = await fetch(url, {headers: AT_GET});
+  if(!r.ok) throw new Error('Airtable error');
+  const records = (await r.json()).records;
+  if(!records.length) throw new Error('Appareil non trouvé');
+  const rec = records[0];
+  if(!rec.fields.data) throw new Error('Données manquantes');
+  return {...JSON.parse(rec.fields.data), _atId: rec.id};
+}
+
+// ══════════════════════════════════════
+// RENDU APP HEADER
+// ══════════════════════════════════════
+function renderAppHeader(){
+  const img = APP.photo
+    ? `<img class="app-thumb" src="${APP.photo}" alt="${APP.short||APP.nom}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  const ph = `<div class="app-thumb-ph" ${APP.photo?'style="display:none;"':''}>📦</div>`;
+  document.getElementById('app-header-wrap').innerHTML = `
+    <div class="app-header">
+      ${img}${ph}
+      <div>
+        <div class="app-info-cat">${APP.cat}</div>
+        <div class="app-info-name">${APP.short||APP.nom}</div>
+        ${APP.note?`<div style="font-size:0.7rem;color:var(--subtil);margin-top:2px;">${APP.note}</div>`:''}
+      </div>
+    </div>`;
+
+  // WhatsApp pré-rempli
+  const waMsg = encodeURIComponent(`Bonjour, je souhaite réserver : ${APP.short||APP.nom}`);
+  document.getElementById('btn-wa').href = `https://wa.me/33775719334?text=${waMsg}`;
+}
+
+// ══════════════════════════════════════
+// RENDU TARIFS
+// ══════════════════════════════════════
+function renderTarifs(){
+  if(APP.variantes && APP.variantes.length){
+    // Appareil avec variantes → on affiche les variantes à choisir
+    document.getElementById('tarifs-wrap').innerHTML = '';
+    document.getElementById('variantes-wrap').innerHTML = `
+      <div class="variantes-section">
+        <div class="variantes-label">Choisissez votre formule</div>
+        <div class="variantes-list">
+          ${APP.variantes.map(v=>`
+            <div class="variante-item${S.varianteId===v.id?' selected':''}" onclick="selectVariante('${v.id}')">
+              <div class="variante-item-top">
+                <div>
+                  <div class="variante-nom">${v.nom}</div>
+                  <div class="variante-sous">${v.sous||''}</div>
+                </div>
+                <div class="variante-prix-tag">dès ${v.p1||'—'}€</div>
+              </div>
+              ${v.inclus?`<div style="font-size:0.7rem;color:var(--subtil);margin-top:6px;line-height:1.5;">${v.inclus}</div>`:''}
+            </div>`).join('')}
+        </div>
+      </div>`;
+  } else {
+    // Appareil simple → tarifs en pilules
+    document.getElementById('variantes-wrap').innerHTML = '';
+    const p1=APP.p1, p3=APP.p3, p4=APP.p4;
+    if(!p1 && !p3 && !p4){
+      document.getElementById('tarifs-wrap').innerHTML = '';
+      return;
+    }
+    document.getElementById('tarifs-wrap').innerHTML = `
+      <div class="tarifs-bar">
+        ${p1?`<div class="tarif-pill"><div class="tarif-label">Journée</div><div class="tarif-prix">${p1}€</div><div class="tarif-detail">24h</div></div>`:''}
+        ${p3?`<div class="tarif-pill best"><div class="tarif-label" style="color:var(--rose);">⭐ Week-end</div><div class="tarif-prix">${p3}€</div><div class="tarif-detail">Ven → Lun</div></div>`:''}
+        ${p4?`<div class="tarif-pill"><div class="tarif-label">Semaine</div><div class="tarif-prix">${p4}€</div><div class="tarif-detail">7 jours</div></div>`:''}
+      </div>`;
+  }
+}
+
+function selectVariante(id){
+  S.varianteId = id;
+  renderTarifs();
+  updatePrixLive();
+}
+
+// ══════════════════════════════════════
+// CALCUL PRIX
+// ══════════════════════════════════════
+function getPrixAppareil(nbj){
+  let p1, p3, p4;
+  if(S.varianteId && APP.variantes && APP.variantes.length){
+    const v = APP.variantes.find(x=>x.id===S.varianteId);
+    if(v){ p1=v.p1; p3=v.p3; p4=v.p4; }
+  } else {
+    p1=APP.p1; p3=APP.p3; p4=APP.p4;
+  }
+  if(nbj >= 7) return p4 || 0;
+  if(nbj >= 3) return Math.min((p1||0)*nbj, p3||(p1||0)*nbj);
+  if(nbj === 2) return Math.min((p1||0)*2, p3||(p1||0)*2);
+  return p1 || 0;
+}
+
+function getPrixDetail(nbj){
+  if(nbj >= 7) return 'Tarif semaine';
+  if(nbj >= 3) return 'Tarif week-end appliqué';
+  if(nbj === 2){
+    let p1 = S.varianteId && APP.variantes?.length
+      ? (APP.variantes.find(x=>x.id===S.varianteId)||{}).p1 || APP.p1
+      : APP.p1;
+    let p3 = S.varianteId && APP.variantes?.length
+      ? (APP.variantes.find(x=>x.id===S.varianteId)||{}).p3 || APP.p3
+      : APP.p3;
+    return (p1*2 > (p3||999)) ? 'Tarif week-end appliqué ✓' : '';
+  }
+  return '';
+}
+
+// ══════════════════════════════════════
+// PRIX LIVE
+// ══════════════════════════════════════
+function updatePrixLive(){
+  if(!S.dateDebut || !S.dateFin) return;
+  // Vérifier variante requise
+  if(APP.variantes && APP.variantes.length && !S.varianteId) return;
+  const nbj = S.nbJours;
+  const prix = getPrixAppareil(nbj);
+  S.prix = prix;
+  const[dy,dm,dd]=S.dateDebut.split('-');
+  const[fy,fm,fd]=S.dateFin.split('-');
+  const rangeStr = nbj===1 ? `Le ${dd}/${dm}/${dy}` : `Du ${dd}/${dm}/${dy} au ${fd}/${fm}/${fy}`;
+  document.getElementById('prix-label').textContent = `${rangeStr} — ${nbj} jour${nbj>1?'s':''}`;
+  document.getElementById('prix-val').textContent = prix + '€';
+  document.getElementById('prix-detail').textContent = getPrixDetail(nbj);
+  document.getElementById('prix-live').style.display = 'block';
+  document.getElementById('btn-step1').disabled = false;
+}
+
+// ══════════════════════════════════════
+// CALENDRIER
+// ══════════════════════════════════════
+let calY=new Date().getFullYear(), calM=new Date().getMonth();
+const MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+function parseLocalDate(ds){const[y,m,d]=ds.split('-').map(Number);return new Date(y,m-1,d);}
+function toDS(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function getDates(from,to){const r=[];let c=parseLocalDate(from);const e=parseLocalDate(to);while(c<=e){r.push(toDS(c));c.setDate(c.getDate()+1);}return r;}
+
+function isBooked(ds){
+  if(!APP) return false;
+  const shortName = (APP.short||APP.nom).toLowerCase();
+  for(const r of resasCache){
+    if(r.fields.Statut==='refused') continue;
+    const appStr = (r.fields.Appareils||'').toLowerCase();
+    if(!appStr.includes(shortName)) continue;
+    const debut = r.fields['Date de début']; if(!debut) continue;
+    const formule = r.fields.Formule||'Journée';
+    const dur = {Journée:2,'Week-end':4,Semaine:8}[formule]||2;
+    const end = parseLocalDate(debut); end.setDate(end.getDate()+dur-1);
+    if(getDates(debut,toDS(end)).includes(ds)) return true;
+  }
+  return false;
+}
+
+function renderCalendar(){
+  document.getElementById('cal-title').textContent = MOIS[calM]+' '+calY;
+  document.getElementById('cal-dh').innerHTML = ['L','M','M','J','V','S','D'].map(j=>`<div class="cal-dh">${j}</div>`).join('');
+  const first = new Date(calY,calM,1);
+  let startDay = first.getDay()-1; if(startDay<0) startDay=6;
+  const daysInMonth = new Date(calY,calM+1,0).getDate();
+  const todayStr = toDS(new Date());
+  let html='';
+  for(let i=0;i<startDay;i++) html+=`<div class="cal-day cal-empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const past=ds<todayStr;
+    const booked=!past&&isBooked(ds);
+    const isStart=S.dateDebut===ds; const isEnd=S.dateFin===ds;
+    const inRange=S.dateDebut&&S.dateFin&&ds>S.dateDebut&&ds<S.dateFin;
+    let cls='cal-day';
+    if(past) cls+=' cal-past';
+    else if(booked) cls+=' cal-booked';
+    if(ds===todayStr) cls+=' cal-today';
+    if(isStart||isEnd) cls+=' cal-selected';
+    if(inRange) cls+=' cal-in-range';
+    const click=(!past&&!booked)?`onclick="pickDate('${ds}')"`:'';
+    html+=`<div class="${cls}" ${click}>${d}</div>`;
+  }
+  document.getElementById('cal-days').innerHTML=html;
+}
+
+function calPrev(){if(calM===0){calM=11;calY--;}else calM--;renderCalendar();}
+function calNext(){if(calM===11){calM=0;calY++;}else calM++;renderCalendar();}
+
+function pickDate(ds){
+  if(!S.dateDebut||(S.dateDebut&&S.dateFin)){
+    S.dateDebut=ds; S.dateFin=null; S.nbJours=null; S.prix=null;
+    document.getElementById('prix-live').style.display='none';
+    document.getElementById('btn-step1').disabled=true;
+  } else {
+    if(ds<S.dateDebut){ S.dateDebut=ds; document.getElementById('btn-step1').disabled=true; }
+    else {
+      S.dateFin=ds;
+      S.nbJours=Math.round((parseLocalDate(ds)-parseLocalDate(S.dateDebut))/864e5)+1;
+      updatePrixLive();
+    }
+  }
+  renderCalendar();
+}
+
+// ══════════════════════════════════════
+// PROGRESS
+// ══════════════════════════════════════
+function renderProgress(){
+  const steps=[{n:1,l:'Dates'},{n:2,l:'Livraison'},{n:3,l:'Coordonnées'}];
+  let html='';
+  steps.forEach((s,i)=>{
+    const done=S.step>s.n; const active=S.step===s.n;
+    html+=`<div class="prog-step${active?' active':''}${done?' done':''}">
+      <div class="prog-num">${done?'✓':i+1}</div><span>${s.l}</span></div>`;
+    if(i<steps.length-1) html+='<div class="prog-sep"></div>';
+  });
+  document.getElementById('progress').innerHTML=html;
+}
+
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+function goStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  S.step=n; renderProgress();
+  if(n===3) renderRecap();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════
+// LIVRAISON
+// ══════════════════════════════════════
+function selectLiv(el,mode){
+  document.querySelectorAll('.livraison-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected'); S.livraison=mode;
+  document.getElementById('f-adresse-wrap').style.display=mode==='livraison'?'block':'none';
+  document.getElementById('btn-step2').disabled=false;
+}
+
+// ══════════════════════════════════════
+// RECAP
+// ══════════════════════════════════════
+function renderRecap(){
+  const[dy,dm,dd]=S.dateDebut.split('-');
+  const[fy,fm,fd]=S.dateFin.split('-');
+  const nbj=S.nbJours;
+  const fLabel=nbj>=7?'Semaine':nbj>=3?'Week-end':nbj===1?'Journée':`${nbj} jours`;
+  let varNom='';
+  if(S.varianteId && APP.variantes){
+    const v=APP.variantes.find(x=>x.id===S.varianteId);
+    if(v) varNom=` — ${v.nom}`;
+  }
+  let rows=`
+    <div class="recap-row"><span class="recap-label">Appareil</span><span class="recap-val">${APP.short||APP.nom}${varNom}</span></div>
+    <div class="recap-row"><span class="recap-label">Du</span><span class="recap-val">${dd}/${dm}/${dy}</span></div>
+    <div class="recap-row"><span class="recap-label">Au</span><span class="recap-val">${fd}/${fm}/${fy}</span></div>
+    <div class="recap-row"><span class="recap-label">Durée</span><span class="recap-val">${fLabel} (${nbj}j)</span></div>
+    <div class="recap-row"><span class="recap-label">Mode</span><span class="recap-val">${S.livraison==='livraison'?'Livraison à domicile':'Retrait sur place'}</span></div>
+    ${S.livraison==='livraison'?`<div class="recap-row"><span class="recap-label" style="color:var(--rose);">Livraison</span><span class="recap-val" style="color:var(--rose);">+ 3 à 8 €</span></div>`:''}
+    <div class="recap-row recap-total"><span class="recap-label">Total</span><span class="recap-val">${S.prix}€${S.livraison==='livraison'?' + livraison':''}</span></div>`;
+  document.getElementById('recap-box').innerHTML=rows;
+  document.getElementById('caution-note').textContent=`Caution ${APP.caution||'—'}€ non encaissée · Paiement à la livraison · Aucun acompte`;
+}
+
+// ══════════════════════════════════════
+// ENVOI
+// ══════════════════════════════════════
+async function sendResa(){
+  const nom=document.getElementById('f-nom').value.trim();
+  const tel=document.getElementById('f-tel').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const adr=document.getElementById('f-adresse').value.trim();
+  const msg=document.getElementById('f-message').value.trim();
+  if(!nom||!tel||!email){showToast('Renseignez les champs obligatoires.','error');return;}
+  if(S.livraison==='livraison'&&!adr){showToast('Indiquez votre adresse de livraison.','error');return;}
+  const nbj=S.nbJours;
+  const fLabel=nbj>=7?'Semaine':nbj>=3?'Week-end':nbj===1?'Journée':`${nbj} jours`;
+  let appStr=APP.short||APP.nom;
+  if(S.varianteId && APP.variantes){
+    const v=APP.variantes.find(x=>x.id===S.varianteId);
+    if(v) appStr+=` — ${v.nom}`;
+  }
+  const ref='MPS-'+Math.random().toString(36).substr(2,6).toUpperCase();
+  showLoading('Envoi en cours…');
+  try{
+    const r=await fetch(AT_RESA,{method:'POST',headers:AT_HDR,body:JSON.stringify({records:[{fields:{
+      'Référence':ref,'Statut':'pending','Nom':nom,'Téléphone':tel,'E-mail':email,
+      'Appareils':appStr,'Formule':fLabel,'Date de début':S.dateDebut,
+      'Livraison':S.livraison==='livraison'?'Livraison à domicile':'Retrait sur place',
+      'Adresse':adr||'','Total':S.prix,'Message':msg||'',
+      'Date demande':new Date().toISOString(),
+    }}]})});
+    if(!r.ok) throw new Error(await r.text());
+    hideLoading();
+    document.getElementById('success-ref').textContent=ref;
+    goStep(4);
+  }catch(e){hideLoading();showToast('Erreur : '+e.message,'error');}
+}
+
+// ══════════════════════════════════════
+// UI
+// ══════════════════════════════════════
+function showLoading(m){document.getElementById('loading-msg').textContent=m;document.getElementById('loading').classList.add('show');}
+function hideLoading(){document.getElementById('loading').classList.remove('show');}
+function showToast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3200);}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+(async()=>{
+  const appId = getParam('app');
+  if(!appId){
+    document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+    document.getElementById('step-error').classList.add('active');
+    return;
+  }
+  showLoading('Chargement…');
+  try{
+    APP = await loadAppareil(appId);
+    // Charger les réservations existantes
+    try{
+      const r=await fetch(AT_RESA+'?sort[0][field]=Date+demande&sort[0][direction]=desc',{headers:AT_GET});
+      if(r.ok) resasCache=(await r.json()).records||[];
+    }catch(e){}
+    hideLoading();
+    renderProgress();
+    renderAppHeader();
+    renderTarifs();
+    renderCalendar();
+    // Si variantes : désactiver le bouton continuer jusqu'à sélection
+    if(APP.variantes && APP.variantes.length){
+      document.getElementById('btn-step1').disabled=true;
+    }
+  }catch(e){
+    hideLoading();
+    document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+    document.getElementById('step-error').classList.add('active');
+  }
+})();
+</script>
+</body>
+</html>
