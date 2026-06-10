@@ -629,5 +629,18 @@ function showToast(msg,type=''){const t=document.getElementById('toast');t.textC
   }
 })();
 </script>
+
+<script>
+// Auto-resize : envoie la hauteur réelle à la page parente
+function sendHeight(){
+  const h = document.body.scrollHeight;
+  window.parent.postMessage({mpsHeight: h}, '*');
+}
+// Envoie à chaque changement de step et au chargement
+const observer = new MutationObserver(sendHeight);
+observer.observe(document.body, {childList:true, subtree:true, attributes:true});
+window.addEventListener('load', sendHeight);
+window.addEventListener('resize', sendHeight);
+</script>
 </body>
 </html>
