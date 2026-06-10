@@ -702,6 +702,7 @@ function showToast(msg,type=''){const t=document.getElementById('toast');t.textC
     renderAppHeader();
     renderTarifs();
     renderCalendar();
+    renderOptions(); // afficher les options dès le chargement
     // Si variantes : désactiver le bouton continuer jusqu'à sélection
     if(APP.variantes && APP.variantes.length){
       document.getElementById('btn-step1').disabled=true;
